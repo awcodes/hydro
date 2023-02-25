@@ -17,6 +17,7 @@
     ],
     "require": {
         "php": "^8.1",
+        "ext-intl": "*",
         "laravel-zero/framework": "^10.0",
         "nunomaduro/termwind": "^1.15"
     },

@@ -2,21 +2,21 @@
 
 namespace App\Actions;
 
-use App\InstallerException;
+use Exception;
 
 trait AbortsCommands
 {
     /**
-     * @throws InstallerException
+     * @throws Exception
      */
     public function abortIf(bool $abort, string $message, $process = null): void
     {
         if ($abort) {
             if ($process) {
-                throw new InstallerException("{$message}\nFailed to run: '{$process->getCommandLine()}'.");
+                throw new Exception("{$message}\nFailed to run: '{$process->getCommandLine()}'.");
             }
 
-            throw new InstallerException("{$message}");
+            throw new Exception("{$message}");
         }
     }
 }

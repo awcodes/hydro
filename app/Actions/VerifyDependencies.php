@@ -3,7 +3,7 @@
 namespace App\Actions;
 
 use App\ConsoleWriter;
-use App\InstallerException;
+use Exception;
 use Symfony\Component\Process\ExecutableFinder;
 
 class VerifyDependencies
@@ -43,13 +43,13 @@ class VerifyDependencies
     {}
 
     /**
-     * @throws InstallerException
+     * @throws Exception
      */
     public function __invoke(): void
     {
         $this->consoleWriter->logStep('Verifying dependencies...');
 
-        $this->consoleWriter->sectionSubTitle('Optional Dependencies');
+        $this->consoleWriter->sectionTitle('Optional Dependencies');
 
         foreach ($this->optionalDependencies as $optionalDependency) {
             [$command, $label, $instructionsUrl] = array_values($optionalDependency);
@@ -65,7 +65,7 @@ class VerifyDependencies
             }
         }
 
-        $this->consoleWriter->sectionSubTitle('Required Dependencies');
+        $this->consoleWriter->sectionTitle('Required Dependencies');
 
         $this->abortIf(
             collect($this->dependencies)->reduce(function ($carry, $dependency) {
