@@ -19,7 +19,8 @@ class DisplayWelcome
     public function __invoke(): void
     {
         foreach (explode("\n", $this->logo) as $line) {
-            app('console-writer')->text("<fg=yellow>{$line} </>");
+            // Extra space on the end fixes an issue with console when it ends with backslash
+            app('console-writer')->text("<fg=#eab308;bg=default>{$line} </>");
         }
     }
 }

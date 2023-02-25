@@ -49,7 +49,7 @@ class VerifyDependencies
     {
         $this->consoleWriter->logStep('Verifying dependencies...');
 
-        $this->consoleWriter->sectionTitle('Optional Dependencies');
+        $this->consoleWriter->sectionSubTitle('Optional Dependencies');
 
         foreach ($this->optionalDependencies as $optionalDependency) {
             [$command, $label, $instructionsUrl] = array_values($optionalDependency);
@@ -65,7 +65,7 @@ class VerifyDependencies
             }
         }
 
-        $this->consoleWriter->sectionTitle('Required Dependencies');
+        $this->consoleWriter->sectionSubTitle('Required Dependencies');
 
         $this->abortIf(
             collect($this->dependencies)->reduce(function ($carry, $dependency) {

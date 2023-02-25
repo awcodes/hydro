@@ -94,6 +94,12 @@ class NewCommand extends BaseCommand
         app(ValidateGitHubConfiguration::class)();
         app(VerifyPathAvailable::class)();
 
+        $this->consoleWriter->newLine();
+        $this->consoleWriter->text([
+            '<fg=green>Done, happy coding!</>',
+        ]);
+        $this->consoleWriter->newLine();
+
         return self::SUCCESS;
     }
 

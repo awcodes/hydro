@@ -4,46 +4,75 @@ namespace App;
 
 use Illuminate\Console\OutputStyle;
 use Symfony\Component\Process\Process;
+use function Termwind\{render};
 
 class ConsoleWriter extends OutputStyle
 {
+
     public const BLUE = 'fg=blue';
     public const GREEN = 'fg=green';
     public const RED = 'fg=red';
     public const MAGENTA = 'fg=magenta';
 
+    public array $styles = [
+        'default' => 'bg-gray-800',
+        'success' => 'bg-green-500 text-black',
+        'danger' => 'bg-red-500',
+        'warning' => 'bg-amber-500 text-black',
+        'info' => 'bg-sky-500',
+    ];
+
     public static function formatString(string $string, string $format): string
     {
-        return "<{$format}>{$string}</>";
+        return "<$format>$string</>";
     }
 
     public function panel(string $prefix, string $message, string $style)
     {
-        parent::block($message, $prefix, $style, ' ', true, false);
+        render(<<<HTML
+            <div class="p-1 mt-1 w-full text-center {$this->styles[$style]}">
+                $prefix: $message
+            </div>
+        HTML);
     }
 
     public function sectionTitle($sectionTitle)
     {
-        $this->newLine();
-        $this->text([
-            "<fg=yellow;bg=default>{$sectionTitle}</>",
-            '<fg=yellow;bg=default>' . str_repeat('#', strlen($sectionTitle)) . '</>',
-        ]);
+        render(<<<HTML
+            <div class="ml-1 px-1 bg-green-300 text-black">
+                $sectionTitle
+            </div>
+        HTML);
+    }
+
+    public function sectionSubTitle($sectionSubTitle)
+    {
+        render(<<<HTML
+            <div class="px-1 mt-1 font-bold">
+                $sectionSubTitle
+            </div>
+        HTML);
     }
 
     public function logStep($message)
     {
-        parent::block($message, null, 'fg=yellow;bg=default', ' // ', false, false);
+        render(<<<HTML
+            <div class="mt-1 ml-1">
+                <em class="text-yellow-500">
+                    $message
+                </em>
+            </div>
+        HTML);
     }
 
     public function exec(string $command)
     {
-        $this->labeledLine('EXEC', $command, 'bg=blue;fg=black');
+        $this->labeledLine('EXEC', $command);
     }
 
     public function success($message, $label = 'PASS'): void
     {
-        $this->labeledLine($label, $message, 'fg=black;bg=green');
+        $this->labeledLine($label, $message, 'success');
     }
 
     public function ok($message): void
@@ -53,17 +82,17 @@ class ConsoleWriter extends OutputStyle
 
     public function note($message, $label = 'NOTE'): void
     {
-        $this->labeledLine($label, $message, 'fg=black;bg=yellow');
+        $this->labeledLine($label, $message, 'warning');
     }
 
     public function warn($message, $label = 'WARN'): void
     {
-        $this->labeledLine($label, "<fg=red;bg=default>{$message}</>", 'fg=black;bg=red');
+        $this->labeledLine($label, $message, 'danger');
     }
 
     public function warnCommandFailed($command): void
     {
-        $this->warn("Failed to run {$command}");
+        $this->warn("Failed to run $command");
     }
 
     public function showOutputErrors(string $errors)
@@ -86,33 +115,51 @@ class ConsoleWriter extends OutputStyle
 
     public function exception($message)
     {
-        parent::block($message, null, 'fg=black;bg=red', ' ', true, false);
+        render(<<<HTML
+            <div class="ml-1 px-1 bg-red-500 text-black">
+                $message
+            </div>
+        HTML);
     }
 
     public function listing(array $elements): void
     {
-        parent::newLine();
-        $text = collect($elements)->map(function ($dependency) {
-            return '  - ' . $dependency;
-        })->toArray();
-        parent::text($text);
-        parent::newLine();
+        $elementsToString = '';
+        foreach ($elements as $item) {
+            $elementsToString .= '<li class="pl-2">' . $item . '</li>';
+        }
+
+        render(<<<HTML
+            <ol class="mt-1 ml-1">$elementsToString</ol>
+        HTML);
     }
 
     public function consoleOutput(string $line, $type)
     {
-        if (config('filament-plugin.store.with_output')) {
+        if (config('installer.store.with_output')) {
             ($type === Process::ERR)
-                ? $this->labeledLine('!️', '┃ ' . $line, 'fg=yellow')
-                : $this->labeledLine('✓︎', '┃ ' . $line, 'fg=green;');
+                ? $this->consoleLabeledLine('!️', '┃ ' . $line, 'fg=yellow')
+                : $this->consoleLabeledLine('✓︎', '┃ ' . $line, 'fg=green;');
         }
     }
 
-    public function labeledLine(string $label, string $message, string $labelFormat = 'fg=default;bg=default', int $indentColumns = 0): void
+    public function consoleLabeledLine(string $label, string $message, string $labelFormat = 'fg=default;bg=default', int $indentColumns = 0): void
     {
         $indent = str_repeat(' ', $indentColumns);
         $this->isDecorated()
-            ? parent::text("{$indent}<{$labelFormat}> {$label} </> {$message}")
+            ? parent::text("$indent<$labelFormat> $label </> $message")
             : parent::text("{$indent}[ {$label} ] {$message}");
+    }
+
+    public function labeledLine(string $label, string $message, string $labelFormat = 'info'): void
+    {
+        render(<<<HTML
+            <div class="mt-1 ml-1">
+                <div class="px-1 text-black {$this->styles[$labelFormat]}">$label</div>
+                <span class="ml-1">
+                    $message
+                </span>
+            </div>
+        HTML);
     }
 }

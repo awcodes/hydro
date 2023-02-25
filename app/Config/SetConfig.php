@@ -68,22 +68,4 @@ class SetConfig
 
         return $default;
     }
-
-    private function getRootPath(string $key, $default)
-    {
-        $configuredKeyValue = $this->get($key, $default);
-
-        return ($configuredKeyValue === $default)
-            ? $default
-            : str_replace('~', config('home_dir'), $configuredKeyValue);
-    }
-
-    private function getWithOutput(string $key, $default): bool
-    {
-        if ($this->consoleWriter->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
-            return true;
-        }
-
-        return $this->get($key, $default);
-    }
 }

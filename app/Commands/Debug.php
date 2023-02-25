@@ -61,7 +61,7 @@ trait Debug
      */
     protected function debugReport(): void
     {
-        $this->consoleWriter->panel('Debug', 'Start', 'fg=black;bg=white');
+        $this->consoleWriter->panel('Debug', 'Start', 'warning');
 
         $this->consoleWriter->sectionTitle('Computed configuration');
 
