@@ -1,5 +1,7 @@
 <?php
 
+use App\Helpers\GetTimezone;
+
 return [
 
     /*
@@ -53,7 +55,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => app(GetTimezone::class)(),
 
     /*
     |--------------------------------------------------------------------------

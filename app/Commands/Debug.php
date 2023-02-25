@@ -31,8 +31,8 @@ trait Debug
 
                 if (is_string($value)) {
                     $value = empty($value)
-                        ? ConsoleWriter::formatString('""', ConsoleWriter::BLUE)
-                        : ConsoleWriter::formatString($value, ConsoleWriter::BLUE);
+                        ? ConsoleWriter::formatString('""', ConsoleWriter::CYAN)
+                        : ConsoleWriter::formatString($value, ConsoleWriter::CYAN);
                 }
 
                 if (is_integer($value)) {
@@ -49,7 +49,7 @@ trait Debug
                     $value = '';
                 }
 
-                return [$keyPrefix . $key . "($type)", $value];
+                return [$keyPrefix . $key, "($type)", $value];
             })->values()->toArray();
 
         $this->consoleWriter->table($headers ?: ['key', 'type', 'value'], $rows);
@@ -102,6 +102,25 @@ trait Debug
                 'force',
                 'quiet',
                 'projectName',
+                'target',
+                'author-name',
+                'author-email',
+                'author-username',
+                'vendor-name',
+                'vendor-slug',
+                'vendor-namespace',
+                'package-name',
+                'package-slug',
+                'package-class-name',
+                'package-description',
+                'no-phpstan',
+                'no-pint',
+                'no-dependabot',
+                'no-ray',
+                'no-changelog-workflow',
+                'theme',
+                'for-forms',
+                'for-tables',
             ],
             '--'
         );
@@ -111,7 +130,7 @@ trait Debug
 
         $this->logTimezoneData();
 
-        $this->consoleWriter->panel('Debug', 'End', 'fg=black;bg=white');
+        $this->consoleWriter->panel('Debug', 'End', 'default');
     }
 
     protected function configToTable(): void

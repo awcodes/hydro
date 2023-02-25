@@ -7,7 +7,6 @@ use App\Commands\NewCommand;
 use App\ConsoleWriter;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class SetConfig
 {
@@ -51,7 +50,7 @@ class SetConfig
         }
 
         if (config('filament-plugin.store.command') === NewCommand::class) {
-            $projectPath = config('filament-plugin.store.root_path') . '/' . config('filament-plugin.store.plugin_name');
+            $projectPath = config('filament-plugin.store.root_path') . '/' . Str::of(config('filament-plugin.store.plugin_name'))->slug();
             config(['filament-plugin.store.project_path' => $projectPath]);
         }
     }

@@ -9,7 +9,7 @@ class DisplayHelpScreen
     public function __invoke(): void
     {
         app('console-writer')->text("\n <comment>Usage:</comment>{$this->createCliStringForCommandUsage()}");
-        app('console-writer')->text("\n <comment>Options (lambo new myApplication):</comment>{$this->createCliStringForOptionDescriptions()}");
+        app('console-writer')->text("\n <comment>Options (filament-plugin new myPlugin):</comment>{$this->createCliStringForOptionDescriptions()}");
     }
 
     public function createCliStringForOptionDescriptions(): string

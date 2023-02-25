@@ -13,6 +13,7 @@ class ConsoleWriter extends OutputStyle
     public const GREEN = 'fg=green';
     public const RED = 'fg=red';
     public const MAGENTA = 'fg=magenta';
+    public const CYAN = 'fg=cyan';
 
     public array $styles = [
         'default' => 'bg-gray-800',
@@ -116,7 +117,7 @@ class ConsoleWriter extends OutputStyle
     public function exception($message)
     {
         render(<<<HTML
-            <div class="ml-1 px-1 bg-red-500 text-black">
+            <div class="ml-1 px-1 bg-red-500 text-white">
                 $message
             </div>
         HTML);
