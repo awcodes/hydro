@@ -39,7 +39,9 @@ class Shell
 
     public function exec(string $command): Process
     {
-        $this->consoleWriter->exec($command);
+        if ($this->consoleWriter->isDebug()) {
+            $this->consoleWriter->exec($command);
+        }
 
         $process = Process::fromShellCommandline($command)
             ->setTty($this->useTTY)

@@ -133,33 +133,32 @@ class VerifyPluginDetails
             );
         }
 
-        //
-//        $this->line("\r");
-//        $this->line('------');
-//        $this->line("Author     : \e[0;36m$this->authorName ($this->authorUsername, $this->authorEmail)\e[0m");
-//        $this->line("Vendor     : \e[0;36m$this->vendorName ($this->vendorSlug)\e[0m");
-//        $this->line('Package    : '."\e[0;36m".$this->packageSlug.($this->packageDescription ? " ($this->packageDescription)" : '')."\e[0m");
-//        $this->line("Namespace  : \e[0;36m$this->vendorNamespace\\$this->packageClassName\e[0m");
-//        $this->line("Class name : \e[0;36m$this->packageClassName\e[0m");
-//        $this->line('---');
-//        $this->line("\e[1;37mPackages & Utilities\e[0m");
-//        $this->line('Larastan/PhpStan  : '.($this->usePhpStan ? "\e[0;32mYes" : "\e[0;31mNo")."\e[0m");
-//        $this->line('Pint              : '.($this->usePint ? "\e[0;32mYes" : "\e[0;31mNo")."\e[0m");
-//        $this->line('Use Dependabot    : '.($this->useDependabot ? "\e[0;32mYes" : "\e[0;31mNo")."\e[0m");
-//        $this->line('Use Laravel Ray   : '.($this->useLaravelRay ? "\e[0;32mYes" : "\e[0;31mNo")."\e[0m");
-//        $this->line('Auto-Changelog    : '.($this->useChangelogWorkflow ? "\e[0;32mYes" : "\e[0;31mNo")."\e[0m");
-//        if ($this->forFormsOnly) {
-//            $this->line("Filament/Forms    : \e[0;32mYes\e[0m");
-//        } elseif ($this->forTablesOnly) {
-//            $this->line("Filament/Tables   : \e[0;32mYes\e[0m");
-//        } else {
-//            $this->line("Filament/Filament : \e[0;32mYes\e[0m");
-//        }
-//        $this->line('------');
-//        $this->line("\r");
-//        $this->line('This script will replace the above values in all relevant files in the plugin directory.');
-//        $this->line("\r");
-//
+        $this->consoleWriter->newLine();
+        $this->consoleWriter->text('--------');
+        $this->consoleWriter->text("Author     : \e[0;36m$this->authorName ($this->authorUsername, $this->authorEmail)\e[0m");
+        $this->consoleWriter->text("Vendor     : \e[0;36m$this->vendorName ($this->vendorSlug)\e[0m");
+        $this->consoleWriter->text('Package    : '."\e[0;36m".$this->packageSlug.($this->packageDescription ? " ($this->packageDescription)" : '')."\e[0m");
+        $this->consoleWriter->text("Namespace  : \e[0;36m$this->vendorNamespace\\$this->packageClassName\e[0m");
+        $this->consoleWriter->text("Class name : \e[0;36m$this->packageClassName\e[0m");
+        $this->consoleWriter->text('--------');
+        $this->consoleWriter->text("\e[1;37mPackages & Utilities\e[0m");
+        $this->consoleWriter->text('Larastan/PhpStan  : '.(! config('filament-plugin.store.no_phpstan') ? "\e[0;32mYes" : "\e[0;31mNo")."\e[0m");
+        $this->consoleWriter->text('Pint              : '.(! config('filament-plugin.store.no_pint') ? "\e[0;32mYes" : "\e[0;31mNo")."\e[0m");
+        $this->consoleWriter->text('Use Dependabot    : '.(! config('filament-plugin.store.no_dependabot') ? "\e[0;32mYes" : "\e[0;31mNo")."\e[0m");
+        $this->consoleWriter->text('Use Laravel Ray   : '.(! config('filament-plugin.store.no_ray') ? "\e[0;32mYes" : "\e[0;31mNo")."\e[0m");
+        $this->consoleWriter->text('Auto-Changelog    : '.(! config('filament-plugin.store.no_changelog_workflow') ? "\e[0;32mYes" : "\e[0;31mNo") ."\e[0m");
+
+        if (config('filament-plugin.store.for_forms')) {
+            $this->consoleWriter->text("Filament/Forms    : \e[0;32mYes\e[0m");
+        } elseif (config('filament-plugin.store.for_tables')) {
+            $this->consoleWriter->text("Filament/Tables   : \e[0;32mYes\e[0m");
+        } else {
+            $this->consoleWriter->text("Filament/Filament : \e[0;32mYes\e[0m");
+        }
+
+        $this->consoleWriter->text('--------');
+        $this->consoleWriter->newLine();
+
         if (! $this->consoleWriter->confirm('Looks good to me!')) {
             $this->consoleWriter->exception('😥 Too bad. I bet it would\'ve been a good one.');
             exit;

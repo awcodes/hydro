@@ -2,8 +2,12 @@
 
 namespace App\Commands;
 
+use App\Actions\CopySkeletonToProject;
 use App\Actions\DisplayHelpScreen;
 use App\Actions\DisplayWelcome;
+use App\Actions\InstallComposerDependencies;
+use App\Actions\InstallNpmDependencies;
+use App\Actions\ProcessPluginStubs;
 use App\Actions\ValidateGitHubConfiguration;
 use App\Actions\VerifyDependencies;
 use App\Actions\VerifyPathAvailable;
@@ -86,8 +90,10 @@ class NewCommand extends BaseCommand
             app(ValidateGitHubConfiguration::class)();
             app(VerifyPathAvailable::class)();
             app(VerifyPluginDetails::class)();
-            dd(config('filament-plugin.store'));
-            // app(CopySkeletonToProject::class)();
+            app(CopySkeletonToProject::class)();
+            app(ProcessPluginStubs::class)();
+            app(InstallNpmDependencies::class)();
+            app(InstallComposerDependencies::class)();
         } catch (Exception $e) {
             $this->consoleWriter->exception($e->getMessage());
             return self::FAILURE;
