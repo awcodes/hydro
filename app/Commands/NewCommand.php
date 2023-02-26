@@ -5,9 +5,12 @@ namespace App\Commands;
 use App\Actions\CopySkeletonToProject;
 use App\Actions\DisplayHelpScreen;
 use App\Actions\DisplayWelcome;
+use App\Actions\InitializeGitHubRepository;
+use App\Actions\InitializeGitRepository;
 use App\Actions\InstallComposerDependencies;
 use App\Actions\InstallNpmDependencies;
 use App\Actions\ProcessPluginStubs;
+use App\Actions\PushToGitHub;
 use App\Actions\ValidateGitHubConfiguration;
 use App\Actions\VerifyDependencies;
 use App\Actions\VerifyPathAvailable;
@@ -19,7 +22,6 @@ use App\Config\ShellConfiguration;
 use App\ConsoleWriter;
 use App\Options;
 use Exception;
-use Illuminate\Support\Str;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -32,8 +34,6 @@ class NewCommand extends BaseCommand
     protected $description = 'Scaffold a new Filament plugin.';
 
     protected ConsoleWriter $consoleWriter;
-
-
 
     public function __construct()
     {
@@ -94,6 +94,9 @@ class NewCommand extends BaseCommand
             app(ProcessPluginStubs::class)();
             app(InstallNpmDependencies::class)();
             app(InstallComposerDependencies::class)();
+            app(InitializeGitRepository::class)();
+            app(InitializeGitHubRepository::class)();
+            app(PushToGitHub::class)();
         } catch (Exception $e) {
             $this->consoleWriter->exception($e->getMessage());
             return self::FAILURE;
