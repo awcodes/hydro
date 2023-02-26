@@ -7,9 +7,9 @@ use Symfony\Component\Process\Process;
 
 class Shell
 {
-    protected string $rootPath;
+    protected ?string $rootPath;
 
-    protected string $projectPath;
+    protected ?string $projectPath;
 
     protected ConsoleWriter $consoleWriter;
 
@@ -35,6 +35,21 @@ class Shell
     public function execIn(string $directory, string $command): Process
     {
         return $this->exec("cd $directory && $command");
+    }
+
+    public function execQuietlyInRoot(string $command): Process
+    {
+        return $this->execQuietly("cd $this->rootPath && $command");
+    }
+
+    public function execQuietlyInProject(string $command): Process
+    {
+        return $this->execQuietly("cd $this->projectPath && $command");
+    }
+
+    public function execQuietlyIn(string $directory, string $command): Process
+    {
+        return $this->execQuietly("cd $directory && $command");
     }
 
     public function exec(string $command): Process
@@ -77,6 +92,7 @@ class Shell
     public function withTTY(): static
     {
         $this->useTTY = true;
+
         return $this;
     }
 }

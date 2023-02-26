@@ -16,14 +16,14 @@ class DisplayHelpScreen
     {
         return collect((new Options())->all())->reduce(function ($carry, $option) {
             $flag = isset($option['short'])
-                ? '-' . $option['short'] . ', --' . $option['long']
-                : '    --' . $option['long'];
+                ? '-'.$option['short'].', --'.$option['long']
+                : '    --'.$option['long'];
 
             $flag .= isset($option['param_description'])
                 ? "={$option['param_description']}"
                 : '';
 
-            return $carry . sprintf("\n   <info>%-33s</info>%s", $flag, $option['cli_description']);
+            return $carry.sprintf("\n   <info>%-33s</info>%s", $flag, $option['cli_description']);
         });
     }
 
@@ -35,7 +35,7 @@ class DisplayHelpScreen
                 'description' => 'Scaffold a new Filament plugin',
             ],
         ])->reduce(function ($carry, $command) {
-            return $carry . sprintf("\n   <info>%-40s</info> %s", $command['usage'], $command['description']);
+            return $carry.sprintf("\n   <info>%-40s</info> %s", $command['usage'], $command['description']);
         });
     }
 }

@@ -4,14 +4,19 @@ namespace App\Actions;
 
 use App\ConsoleWriter;
 use App\Shell;
+
 class PushToGitHub
 {
     public const WARNING_FAILED_TO_PUSH = 'Failed to push project to GitHub.';
-    public const WARNING_UNABLE_TO_GET_BRANCH_NAME = self::WARNING_FAILED_TO_PUSH . ' Unable to determine git branch name.';
+
+    public const WARNING_UNABLE_TO_GET_BRANCH_NAME = self::WARNING_FAILED_TO_PUSH.' Unable to determine git branch name.';
+
     public function __construct(
         protected Shell $shell,
         protected ConsoleWriter $consoleWriter
-    ){}
+    ) {
+    }
+
     public function __invoke(): void
     {
         if (! (config('filament-plugin.store.push_to_github'))) {
@@ -25,6 +30,7 @@ class PushToGitHub
             $this->consoleWriter->warn(self::WARNING_UNABLE_TO_GET_BRANCH_NAME);
             $this->consoleWriter->warn("Failed to run {$branchNameProcess->getCommandLine()}");
             $this->consoleWriter->showOutputErrors($branchNameProcess->getErrorOutput());
+
             return;
         }
 
@@ -33,6 +39,7 @@ class PushToGitHub
             $this->consoleWriter->warn(self::WARNING_FAILED_TO_PUSH);
             $this->consoleWriter->warn("Failed to run {$process->getCommandLine()}");
             $this->consoleWriter->showOutputErrors($process->getErrorOutput());
+
             return;
         }
 

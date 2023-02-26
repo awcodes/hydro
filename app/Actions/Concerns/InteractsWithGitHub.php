@@ -14,12 +14,12 @@ trait InteractsWithGitHub
 
     protected static function gitHubInitializationRequested(): bool
     {
-        return config('filament-plugin.store.' . FilamentPluginConfiguration::INITIALIZE_GITHUB) === true;
+        return config('filament-plugin.store.'.FilamentPluginConfiguration::INITIALIZE_GITHUB) === true;
     }
 
     protected static function getDescription(): string
     {
-        $description = config('filament-plugin.store.' . FilamentPluginConfiguration::GITHUB_DESCRIPTION);
+        $description = config('filament-plugin.store.'.FilamentPluginConfiguration::GITHUB_DESCRIPTION);
 
         if (is_null($description)) {
             return '';
@@ -30,7 +30,7 @@ trait InteractsWithGitHub
 
     protected static function getHomepage(): string
     {
-        $homepage = config('filament-plugin.store.' . FilamentPluginConfiguration::GITHUB_HOMEPAGE);
+        $homepage = config('filament-plugin.store.'.FilamentPluginConfiguration::GITHUB_HOMEPAGE);
 
         if (is_null($homepage)) {
             return '';
@@ -70,7 +70,7 @@ trait InteractsWithGitHub
     protected static function getRepositoryName(): string
     {
         $name = config('filament-plugin.store.project_name');
-        $organization = config('filament-plugin.store.' . FilamentPluginConfiguration::GITHUB_ORGANIZATION);
+        $organization = config('filament-plugin.store.'.FilamentPluginConfiguration::GITHUB_ORGANIZATION);
 
         return $organization ? " $organization/$name" : " $name";
     }

@@ -3,4 +3,5 @@
 /.vscode
 /.vagrant
 .phpunit.result.cache
-/test
+output/*
+!output/.gitkeep

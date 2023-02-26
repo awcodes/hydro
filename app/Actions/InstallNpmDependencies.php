@@ -13,7 +13,8 @@ class InstallNpmDependencies
     public function __construct(
         protected Shell $shell,
         protected ConsoleWriter $consoleWriter
-    ){}
+    ) {
+    }
 
     /**
      * @throws Exception
@@ -21,13 +22,13 @@ class InstallNpmDependencies
     public function __invoke(): void
     {
         if ($this->consoleWriter->confirm('Install NPM dependencies?')) {
-            $this->consoleWriter->logStep('Installing node dependencies');
+            $this->consoleWriter->logStep('Installing node dependencies...');
 
             $process = $this->shell->execInProject("npm install{$this->withQuiet()}");
-            $this->abortIf(!$process->isSuccessful(), 'Installation of npm dependencies did not complete successfully', $process);
+            $this->abortIf(! $process->isSuccessful(), 'Installation of npm dependencies did not complete successfully', $process);
 
-            $this->consoleWriter->newLine();
             $this->consoleWriter->success('Npm dependencies installed.');
+            $this->consoleWriter->newLine();
         }
     }
 

@@ -38,9 +38,9 @@ class VerifyDependencies
 
     public function __construct(
         protected ExecutableFinder $finder,
-        protected ConsoleWriter $consoleWriter
-    )
-    {}
+        protected ConsoleWriter $consoleWriter,
+    ) {
+    }
 
     /**
      * @throws Exception
@@ -59,9 +59,9 @@ class VerifyDependencies
                     continue;
                 }
 
-                $this->consoleWriter->note("{$label}, an optional dependency, is missing. you can find installation instructions at: <a class=\"text-sky-500\" href=\"{$instructionsUrl}\">{$instructionsUrl}</a>");
+                $this->consoleWriter->note("$label an optional dependency, is missing. you can find installation instructions at: <a class=\"text-sky-500\" href=\"{$instructionsUrl}\">{$instructionsUrl}</a>");
             } else {
-                $this->consoleWriter->success("{$label} found at: <span class=\"text-sky-600\">{$installedDependency}</span>");
+                $this->consoleWriter->success("{$label} found at: <span class=\"text-sky-500\">{$installedDependency}</span>");
             }
         }
 
@@ -69,13 +69,16 @@ class VerifyDependencies
 
         $this->abortIf(
             collect($this->dependencies)->reduce(function ($carry, $dependency) {
+
                 [$command, $label, $instructionsUrl] = array_values($dependency);
+
                 if (($installedDependency = $this->finder->find($command)) === null) {
                     $this->consoleWriter->warn("{$label} is missing. You can find installation instructions at: <a class=\"text-sky-500\" href=\"{$instructionsUrl}\">{$instructionsUrl}</a>");
 
                     return true;
                 }
-                $this->consoleWriter->success("{$label} found at: <span class=\"text-sky-600\">{$installedDependency}</span>");
+
+                $this->consoleWriter->success("{$label} found at: <span class=\"text-sky-500\">{$installedDependency}</span>");
 
                 return $carry ?? false;
             }),

@@ -7,46 +7,72 @@ use Illuminate\Support\Str;
 abstract class FilamentPluginConfiguration
 {
     public const TARGET = 'target';
+
     public const EDITOR = 'editor';
+
     public const PLUGIN_NAME = 'plugin_name';
+
     public const ROOT_PATH = 'root_path';
+
     public const WITH_OUTPUT = 'with_output';
-    public const USE_DEVELOP_BRANCH = 'dev';
+
     public const FORCE_CREATE = 'force_create';
+
     public const COMMIT_MESSAGE = 'commit_message';
+
     public const INITIALIZE_GITHUB = 'initialize_github';
+
     public const GITHUB_PUBLIC = 'github_public';
+
     public const GITHUB_DESCRIPTION = 'github_description';
+
     public const GITHUB_HOMEPAGE = 'github_homepage';
+
     public const GITHUB_ORGANIZATION = 'github_organization';
+
     public const COMMAND = 'command';
 
     public const AUTHOR_NAME = 'author_name';
+
     public const AUTHOR_EMAIL = 'author_email';
+
     public const AUTHOR_USERNAME = 'author_username';
+
     public const VENDOR_NAME = 'vendor_name';
+
     public const VENDOR_SLUG = 'vendor_slug';
+
     public const VENDOR_NAMESPACE = 'vendor_namespace';
+
     public const PACKAGE_NAME = 'package_name';
+
     public const PACKAGE_SLUG = 'package_slug';
+
     public const PACKAGE_CLASS_NAME = 'package_class_name';
+
     public const PACKAGE_DESCRIPTION = 'package_description';
+
     public const PHPSTAN = 'no_phpstan';
+
     public const PINT = 'no_pint';
+
     public const DEPENDABOT = 'no_dependabot';
+
     public const RAY = 'no_ray';
+
     public const CHANGELOG_WORKFLOW = 'no_changelog_workflow';
+
     public const THEME = 'theme';
+
     public const FOR_FORMS = 'for_forms';
+
     public const FOR_TABLES = 'for_tables';
-
-
 
     public function __construct(array $keyMap)
     {
         $settings = $this->getSettings();
 
-        collect($keyMap)->each(function($item, $key) use ($settings) {
+        collect($keyMap)->each(function ($item, $key) use ($settings) {
             $this->$item = $this->get($key, $settings);
         });
     }

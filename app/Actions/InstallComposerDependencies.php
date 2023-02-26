@@ -13,7 +13,8 @@ class InstallComposerDependencies
     public function __construct(
         protected Shell $shell,
         protected ConsoleWriter $consoleWriter
-    ){}
+    ) {
+    }
 
     /**
      * @throws Exception
@@ -21,13 +22,13 @@ class InstallComposerDependencies
     public function __invoke(): void
     {
         if ($this->consoleWriter->confirm('Install Composer dependencies?')) {
-            $this->consoleWriter->logStep('Installing Composer dependencies');
+            $this->consoleWriter->logStep('Installing Composer dependencies...');
 
             $process = $this->shell->execInProject("composer install{$this->withQuiet()}");
-            $this->abortIf(!$process->isSuccessful(), 'Installation of Composer dependencies did not complete successfully', $process);
+            $this->abortIf(! $process->isSuccessful(), 'Installation of Composer dependencies did not complete successfully', $process);
 
-            $this->consoleWriter->newLine();
             $this->consoleWriter->success('Composer dependencies installed.');
+            $this->consoleWriter->newLine();
         }
     }
 

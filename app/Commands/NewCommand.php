@@ -9,6 +9,7 @@ use App\Actions\InitializeGitHubRepository;
 use App\Actions\InitializeGitRepository;
 use App\Actions\InstallComposerDependencies;
 use App\Actions\InstallNpmDependencies;
+use App\Actions\OpenInEditor;
 use App\Actions\ProcessPluginStubs;
 use App\Actions\PushToGitHub;
 use App\Actions\ValidateGitHubConfiguration;
@@ -17,6 +18,7 @@ use App\Actions\VerifyPathAvailable;
 use App\Actions\VerifyPluginDetails;
 use App\Config\CommandLineConfiguration;
 use App\Config\FilamentPluginConfiguration;
+use App\Config\SavedConfiguration;
 use App\Config\SetConfig;
 use App\Config\ShellConfiguration;
 use App\ConsoleWriter;
@@ -24,6 +26,8 @@ use App\Options;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use function Termwind\terminal;
+use function Termwind\render;
 
 class NewCommand extends BaseCommand
 {
@@ -50,7 +54,7 @@ class NewCommand extends BaseCommand
     {
         return collect((new Options())->all())->reduce(
             function ($carry, $option) {
-                return $carry . $this->buildSignatureOption($option);
+                return $carry.$this->buildSignatureOption($option);
             },
             "new\n{pluginName? : Name of the Filament plugin}"
         );
@@ -58,23 +62,24 @@ class NewCommand extends BaseCommand
 
     public function buildSignatureOption($option): string
     {
-        $commandlineOption = isset($option['short']) ? ($option['short'] . '|' . $option['long']) : $option['long'];
+        $commandlineOption = isset($option['short']) ? ($option['short'].'|'.$option['long']) : $option['long'];
 
         if (isset($option['param_description'])) {
-            $commandlineOption .= '=' . ($option['default'] ?? '');
+            $commandlineOption .= '='.($option['default'] ?? '');
         }
 
         return "\n{--{$commandlineOption} : {$option['cli_description']}}";
     }
 
     /**
-     * @return int
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      * @throws Exception
      */
     public function handle(): int
     {
+        terminal()->clear();
+
         app(DisplayWelcome::class)();
 
         if (! $this->argument('pluginName')) {
@@ -87,18 +92,21 @@ class NewCommand extends BaseCommand
 
         try {
             app(VerifyDependencies::class)();
-            app(ValidateGitHubConfiguration::class)();
             app(VerifyPathAvailable::class)();
             app(VerifyPluginDetails::class)();
+            exit;
             app(CopySkeletonToProject::class)();
             app(ProcessPluginStubs::class)();
             app(InstallNpmDependencies::class)();
             app(InstallComposerDependencies::class)();
             app(InitializeGitRepository::class)();
+            app(ValidateGitHubConfiguration::class)();
             app(InitializeGitHubRepository::class)();
             app(PushToGitHub::class)();
+            app(OpenInEditor::class)();
         } catch (Exception $e) {
             $this->consoleWriter->exception($e->getMessage());
+
             return self::FAILURE;
         }
 
@@ -128,7 +136,6 @@ class NewCommand extends BaseCommand
             'path' => FilamentPluginConfiguration::ROOT_PATH,
             'force' => FilamentPluginConfiguration::FORCE_CREATE,
             'with-output' => FilamentPluginConfiguration::WITH_OUTPUT,
-            'dev' => FilamentPluginConfiguration::USE_DEVELOP_BRANCH,
             'github' => FilamentPluginConfiguration::INITIALIZE_GITHUB,
             'gh-public' => FilamentPluginConfiguration::GITHUB_PUBLIC,
             'gh-description' => FilamentPluginConfiguration::GITHUB_DESCRIPTION,
@@ -156,12 +163,26 @@ class NewCommand extends BaseCommand
             'for-tables' => FilamentPluginConfiguration::FOR_TABLES,
         ]);
 
+        $savedConfiguration = new SavedConfiguration([
+            'PROJECTPATH' => FilamentPluginConfiguration::ROOT_PATH,
+            'MESSAGE' => FilamentPluginConfiguration::COMMIT_MESSAGE,
+            'CODEEDITOR' => FilamentPluginConfiguration::EDITOR,
+            'AUTHORNAME' => FilamentPluginConfiguration::AUTHOR_NAME,
+            'AUTHOREMAIL' => FilamentPluginConfiguration::AUTHOR_EMAIL,
+            'AUTHORUSERNAME' => FilamentPluginConfiguration::AUTHOR_USERNAME,
+            'FILAMENTTARGET' => FilamentPluginConfiguration::TARGET,
+            'VENDORNAME' => FilamentPluginConfiguration::VENDOR_NAME,
+            'VENDORSLUG' => FilamentPluginConfiguration::VENDOR_SLUG,
+            'VENDORNAMESPACE' => FilamentPluginConfiguration::VENDOR_NAMESPACE,
+        ]);
+
         $shellConfiguration = new ShellConfiguration([
             'EDITOR' => FilamentPluginConfiguration::EDITOR,
         ]);
 
         (new SetConfig(
             $commandLineConfiguration,
+            $savedConfiguration,
             $shellConfiguration,
             $this->consoleWriter,
             $this->input
@@ -173,7 +194,6 @@ class NewCommand extends BaseCommand
             FilamentPluginConfiguration::ROOT_PATH => getcwd(),
             FilamentPluginConfiguration::FORCE_CREATE => false,
             FilamentPluginConfiguration::WITH_OUTPUT => false,
-            FilamentPluginConfiguration::USE_DEVELOP_BRANCH => false,
             FilamentPluginConfiguration::INITIALIZE_GITHUB => false,
             FilamentPluginConfiguration::GITHUB_PUBLIC => false,
             FilamentPluginConfiguration::PLUGIN_NAME => null,

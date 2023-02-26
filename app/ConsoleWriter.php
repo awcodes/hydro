@@ -8,11 +8,14 @@ use function Termwind\{render};
 
 class ConsoleWriter extends OutputStyle
 {
-
     public const BLUE = 'fg=blue';
+
     public const GREEN = 'fg=green';
+
     public const RED = 'fg=red';
+
     public const MAGENTA = 'fg=magenta';
+
     public const CYAN = 'fg=cyan';
 
     public array $styles = [
@@ -51,6 +54,26 @@ class ConsoleWriter extends OutputStyle
         render(<<<HTML
             <div class="px-1 mt-1 font-bold">
                 $sectionSubTitle
+            </div>
+        HTML);
+    }
+
+    public function twoColumnDetail(string $first, ?string $second = null)
+    {
+        $first = htmlspecialchars($first);
+        $second = htmlspecialchars($second);
+
+        render(<<<HTML
+            <div class="flex mx-2 max-w-150">
+                <span>
+                    $first
+                </span>
+                <span class="flex-1 content-repeat-[.] text-gray ml-1"></span>
+                <?php if ($second !== '') { ?>
+                    <span class="ml-1">
+                        $second
+                    </span>
+                <?php } ?>
             </div>
         HTML);
     }
@@ -100,7 +123,7 @@ class ConsoleWriter extends OutputStyle
     {
         parent::text([
             '<fg=red;bg=default>--------------------------------------------------------------------------------',
-            str_replace(PHP_EOL, PHP_EOL . ' ', trim($errors)),
+            str_replace(PHP_EOL, PHP_EOL.' ', trim($errors)),
             '--------------------------------------------------------------------------------</>',
         ]);
     }
@@ -109,7 +132,7 @@ class ConsoleWriter extends OutputStyle
     {
         parent::text([
             '--------------------------------------------------------------------------------',
-            str_replace(PHP_EOL, PHP_EOL . ' ', trim($errors)),
+            str_replace(PHP_EOL, PHP_EOL.' ', trim($errors)),
             '--------------------------------------------------------------------------------',
         ]);
     }
@@ -127,7 +150,7 @@ class ConsoleWriter extends OutputStyle
     {
         $elementsToString = '';
         foreach ($elements as $item) {
-            $elementsToString .= '<li class="pl-2">' . $item . '</li>';
+            $elementsToString .= '<li class="pl-2">'.$item.'</li>';
         }
 
         render(<<<HTML
@@ -137,10 +160,10 @@ class ConsoleWriter extends OutputStyle
 
     public function consoleOutput(string $line, $type)
     {
-        if (config('installer.store.with_output')) {
+        if (! config('filament-plugin.store.with_output')) {
             ($type === Process::ERR)
-                ? $this->consoleLabeledLine('!️', '┃ ' . $line, 'fg=yellow')
-                : $this->consoleLabeledLine('✓︎', '┃ ' . $line, 'fg=green;');
+                ? $this->consoleLabeledLine('!️', '┃ '.$line, 'fg=yellow')
+                : $this->consoleLabeledLine('✓︎', '┃ '.$line, 'fg=green;');
         }
     }
 

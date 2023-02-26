@@ -16,8 +16,7 @@ trait Debug
         array $filter = null,
         string $keyPrefix = '',
         array $headers = null
-    ): void
-    {
+    ): void {
         if (empty($data)) {
             return;
         }
@@ -35,7 +34,7 @@ trait Debug
                         : ConsoleWriter::formatString($value, ConsoleWriter::CYAN);
                 }
 
-                if (is_integer($value)) {
+                if (is_int($value)) {
                     $value = ConsoleWriter::formatString($value, ConsoleWriter::MAGENTA);
                 }
 
@@ -49,7 +48,7 @@ trait Debug
                     $value = '';
                 }
 
-                return [$keyPrefix . $key, "($type)", $value];
+                return [$keyPrefix.$key, "($type)", $value];
             })->values()->toArray();
 
         $this->consoleWriter->table($headers ?: ['key', 'type', 'value'], $rows);
@@ -71,7 +70,7 @@ trait Debug
 
         $this->consoleWriter->listing([
             'command line parameters',
-            'shell environment variables'
+            'shell environment variables',
         ]);
 
         $this->configToTable();
@@ -144,11 +143,12 @@ trait Debug
         $result = [];
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $result = array_merge($result, $this->dotFlatten($prefix . '.' . $key, $value));
+                $result = array_merge($result, $this->dotFlatten($prefix.'.'.$key, $value));
             } else {
-                $result[$prefix . '.' . $key] = $value;
+                $result[$prefix.'.'.$key] = $value;
             }
         }
+
         return $result;
     }
 
@@ -175,7 +175,7 @@ trait Debug
             'Carbon (Timezone identifier)' => Carbon::now()->format('e'),
 
             // 1 if Daylight Saving Time, 0 otherwise.
-            'Carbon (Daylight savings)' => (bool)Carbon::now()->format('I'),
+            'Carbon (Daylight savings)' => (bool) Carbon::now()->format('I'),
 
             // Difference to Greenwich time (GMT)
             'Carbon (Difference to GMT w/O)' => Carbon::now()->format('O'), // +0200'Carbon (Difference to GMT w/P)' => Carbon::now()->format('P'), // +02:00

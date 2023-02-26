@@ -32,7 +32,7 @@ class VerifyPluginDetails
 
     public function __construct(
         protected ConsoleWriter $consoleWriter
-    ){
+    ) {
         $this->authorName = config('filament-plugin.store.author_name');
         $this->authorEmail = config('filament-plugin.store.author_email');
         $this->authorUsername = config('filament-plugin.store.author_username');
@@ -50,6 +50,10 @@ class VerifyPluginDetails
      */
     public function __invoke(): void
     {
+        $this->consoleWriter->logStep('Verifying plugin details...');
+
+        $this->consoleWriter->newLine();
+
         if (! $this->authorName) {
             $gitName = exec('git config user.name');
             $this->authorName = $this->consoleWriter->ask('Author name', $gitName);
@@ -133,7 +137,6 @@ class VerifyPluginDetails
             );
         }
 
-        $this->consoleWriter->newLine();
         $this->consoleWriter->text('--------');
         $this->consoleWriter->text("Author     : \e[0;36m$this->authorName ($this->authorUsername, $this->authorEmail)\e[0m");
         $this->consoleWriter->text("Vendor     : \e[0;36m$this->vendorName ($this->vendorSlug)\e[0m");
@@ -146,7 +149,7 @@ class VerifyPluginDetails
         $this->consoleWriter->text('Pint              : '.(! config('filament-plugin.store.no_pint') ? "\e[0;32mYes" : "\e[0;31mNo")."\e[0m");
         $this->consoleWriter->text('Use Dependabot    : '.(! config('filament-plugin.store.no_dependabot') ? "\e[0;32mYes" : "\e[0;31mNo")."\e[0m");
         $this->consoleWriter->text('Use Laravel Ray   : '.(! config('filament-plugin.store.no_ray') ? "\e[0;32mYes" : "\e[0;31mNo")."\e[0m");
-        $this->consoleWriter->text('Auto-Changelog    : '.(! config('filament-plugin.store.no_changelog_workflow') ? "\e[0;32mYes" : "\e[0;31mNo") ."\e[0m");
+        $this->consoleWriter->text('Auto-Changelog    : '.(! config('filament-plugin.store.no_changelog_workflow') ? "\e[0;32mYes" : "\e[0;31mNo")."\e[0m");
 
         if (config('filament-plugin.store.for_forms')) {
             $this->consoleWriter->text("Filament/Forms    : \e[0;32mYes\e[0m");
