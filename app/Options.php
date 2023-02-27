@@ -6,54 +6,39 @@ class Options
 {
     protected array $options = [
         [
-            'long' => 'author-name',
-            'param_description' => 'AUTHOR_NAME',
+            'long' => 'author',
+            'param_description' => 'AUTHOR',
             'cli_description' => 'Author name',
         ],
         [
-            'long' => 'author-email',
-            'param_description' => 'AUTHOR_EMAIL',
+            'long' => 'email',
+            'param_description' => 'EMAIL',
             'cli_description' => 'Author email',
         ],
         [
-            'long' => 'author-username',
-            'param_description' => 'AUTHOR_USERNAME',
-            'cli_description' => 'Author username',
+            'long' => 'username',
+            'param_description' => 'USERNAME',
+            'cli_description' => 'Author GitHub user name',
         ],
         [
-            'long' => 'vendor-name',
-            'param_description' => 'VENDOR_NAME',
+            'long' => 'vendor',
+            'param_description' => 'VENDOR',
             'cli_description' => 'Vendor name',
         ],
         [
             'long' => 'vendor-slug',
-            'param_description' => 'VENDOR_SLUG',
+            'param_description' => 'V_SLUG',
             'cli_description' => 'Vendor slug',
         ],
         [
             'long' => 'vendor-namespace',
-            'param_description' => 'VENDOR_NAMESPACE',
+            'param_description' => 'NAMESPACE',
             'cli_description' => 'Vendor namespace',
         ],
         [
-            'long' => 'package-name',
-            'param_description' => 'PACKAGE_NAME',
-            'cli_description' => 'Package name',
-        ],
-        [
-            'long' => 'package-slug',
-            'param_description' => 'PACKAGE_SLUG',
-            'cli_description' => 'Package slug',
-        ],
-        [
-            'long' => 'package-class-name',
-            'param_description' => 'PACKAGE_CLASS_NAME',
-            'cli_description' => 'Package class name',
-        ],
-        [
-            'long' => 'package-description',
-            'param_description' => 'PACKAGE_DESCRIPTION',
-            'cli_description' => 'Package description',
+            'long' => 'description',
+            'param_description' => 'DESCRIPTION',
+            'cli_description' => 'Package description <fg=yellow>(wrap with quotes)</>',
         ],
         [
             'long' => 'no-phpstan',
@@ -77,15 +62,15 @@ class Options
         ],
         [
             'long' => 'theme',
-            'cli_description' => 'Is plugin a custom theme',
+            'cli_description' => 'Is plugin a custom theme <fg=yellow>(3.x only)</>',
         ],
         [
             'long' => 'for-forms',
-            'cli_description' => 'Is plugin only for the Forms package',
+            'cli_description' => 'Is plugin only for the Forms package <fg=yellow>(3.x only)</>',
         ],
         [
             'long' => 'for-tables',
-            'cli_description' => 'Is plugin only for the Tables package',
+            'cli_description' => 'Is plugin only for the Tables package <fg=yellow>(3.x only)</>',
         ],
         [
             'short' => 't',
@@ -109,7 +94,7 @@ class Options
             'short' => 'm',
             'long' => 'message',
             'param_description' => 'MESSAGE',
-            'cli_description' => 'Customize the initial commit message (wrap with quotes!)',
+            'cli_description' => 'Customize the initial commit message <fg=yellow>(wrap with quotes)</>',
         ],
         [
             'short' => 'g',
@@ -119,11 +104,6 @@ class Options
         [
             'long' => 'gh-public',
             'cli_description' => 'Make the new GitHub repository public',
-        ],
-        [
-            'long' => 'gh-description',
-            'param_description' => 'DESCRIPTION',
-            'cli_description' => 'Initialize the new GitHub repository with the provided <info>DESCRIPTION</info>',
         ],
         [
             'long' => 'gh-homepage',

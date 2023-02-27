@@ -17,11 +17,41 @@ class ProcessPluginStubs
 
     protected string $projectPath;
 
+    protected string $authorName;
+
+    protected string $authorEmail;
+
+    protected string $authorUsername;
+
+    protected string $vendorName;
+
+    protected string $vendorSlug;
+
+    protected string $vendorNamespace;
+
+    protected string $packageName;
+
+    protected string $packageSlug;
+
+    protected string $packageClassName;
+
+    protected string $packageDescription;
+
     public function __construct(
         protected ConsoleWriter $consoleWriter,
         protected Shell $shell,
     ) {
-        $this->projectPath = config('filament-plugin.store.project_path');
+        $this->projectPath = config('hydro.store.project_path');
+        $this->authorName = config('hydro.store.author');
+        $this->authorEmail = config('hydro.store.email');
+        $this->authorUsername = config('hydro.store.username');
+        $this->vendorName = config('hydro.store.vendor');
+        $this->vendorSlug = config('hydro.store.vendor_slug');
+        $this->vendorNamespace = config('hydro.store.vendor_namespace');
+        $this->packageName = config('hydro.store.plugin_name');
+        $this->packageSlug = config('hydro.store.plugin_slug');
+        $this->packageClassName = config('hydro.store.plugin_classname');
+        $this->packageDescription = config('hydro.store.description') ?? '';
     }
 
     /**
@@ -31,15 +61,15 @@ class ProcessPluginStubs
     {
         $this->consoleWriter->logStep('Scaffolding plugin...');
 
-        if (config('filament-plugin.store.target') === '3.x') {
-            if (config('filament-plugin.store.for_forms')) {
+        if (config('hydro.store.target') === '3.x') {
+            if (config('hydro.store.for_forms')) {
                 File::delete($this->projectPath.'/src/SkeletonTheme.php');
 
                 $this->removeComposerDeps([
                     'filament/filament',
                     'filament/tables',
                 ]);
-            } elseif (config('filament-plugin.store.for_tables')) {
+            } elseif (config('hydro.store.for_tables')) {
                 File::delete($this->projectPath.'/src/SkeletonTheme.php');
 
                 $this->removeComposerDeps([
@@ -47,7 +77,7 @@ class ProcessPluginStubs
                     'filament/forms',
                 ]);
             } else {
-                if (config('filament-plugin.store.theme')) {
+                if (config('hydro.store.theme')) {
                     File::delete($this->projectPath.'/src/SkeletonServiceProvider.php');
                     File::delete($this->projectPath.'/src/Skeleton.php');
                     File::deleteDirectory($this->projectPath.'/config');
@@ -68,7 +98,7 @@ class ProcessPluginStubs
                 ]);
             }
 
-            if (config('filament-plugin.store.theme')) {
+            if (config('hydro.store.theme')) {
                 File::copy($this->projectPath.'/configure-stubs/theme/package.json', $this->projectPath.'/package.json');
                 File::copy($this->projectPath.'/configure-stubs/theme/plugin.css', $this->projectPath.'/resources/css/plugin.css');
                 File::copy($this->projectPath.'/configure-stubs/theme/tailwind.config.js', $this->projectPath.'/tailwind.config.js');
@@ -89,58 +119,57 @@ class ProcessPluginStubs
 
         foreach ($this->files as $file) {
             $this->replaceInFile($file, [
-                ':author_name' => config('filament-plugin.store.author_name'),
-                ':author_username' => config('filament-plugin.store.author_username'),
-                'author@domain.com' => config('filament-plugin.store.author_email'),
-                ':vendor_name' => config('filament-plugin.store.vendor_name'),
-                ':vendor_slug' => config('filament-plugin.store.vendor_slug'),
-                'VendorName' => config('filament-plugin.store.vendor_namespace'),
-                ':package_name' => config('filament-plugin.store.package_name'),
-                ':package_slug' => config('filament-plugin.store.package_slug'),
-                ':package_slug_without_prefix' => Str::of(config('filament-plugin.store.package_slug'))->replace('laravel-', ''),
-                'Skeleton' => config('filament-plugin.store.package_class_name'),
-                'skeleton' => config('filament-plugin.store.package_slug'),
-                ':package_description' => config('filament-plugin.store.package_description'),
+                ':author_name' => $this->authorName,
+                ':author_username' => $this->authorUsername,
+                'author@domain.com' => $this->authorEmail,
+                ':vendor_name' => $this->vendorName,
+                ':vendor_slug' => $this->vendorSlug,
+                'VendorName' => $this->vendorNamespace,
+                ':package_name' => $this->packageName,
+                ':package_slug' => $this->packageSlug,
+                ':package_slug_without_prefix' => Str::of($this->packageSlug)->replace('laravel-', ''),
+                'Skeleton' => $this->packageClassName,
+                'skeleton' => $this->packageSlug,
+                ':package_description' => $this->packageDescription,
             ]);
 
             match (true) {
                 str_contains(
                     $file,
-                    $this->determineSeparator('src/Skeleton.php')) => File::move($file, Str::of($file)->replace('Skeleton', config('filament-plugin.store.package_class_name'))
+                    $this->determineSeparator('src/Skeleton.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)
                     ),
                 str_contains(
                     $file,
-                    $this->determineSeparator('src/SkeletonTheme.php')) => File::move($file, Str::of($file)->replace('Skeleton', config('filament-plugin.store.package_class_name'))
+                    $this->determineSeparator('src/SkeletonTheme.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)
                     ),
                 str_contains(
                     $file,
-                    $this->determineSeparator('src/SkeletonServiceProvider.php')) => File::move($file, Str::of($file)->replace('Skeleton', config('filament-plugin.store.package_class_name'))
+                    $this->determineSeparator('src/SkeletonServiceProvider.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)
                     ),
                 str_contains(
                     $file,
-                    $this->determineSeparator('src/Facades/Skeleton.php')) => File::move($file, Str::of($file)->replace('Skeleton', config('filament-plugin.store.package_class_name'))
+                    $this->determineSeparator('src/Facades/Skeleton.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)
                     ),
                 str_contains(
                     $file,
-                    $this->determineSeparator('src/Testing/TestsSkeleton.php')) => File::move($file, Str::of($file)->replace('Skeleton', config('filament-plugin.store.package_class_name'))
+                    $this->determineSeparator('src/Testing/TestsSkeleton.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)
                     ),
                 str_contains(
                     $file,
-                    $this->determineSeparator('src/Commands/SkeletonCommand.php')) => File::move($file, Str::of($file)->replace('Skeleton', config('filament-plugin.store.package_class_name'))
+                    $this->determineSeparator('src/Commands/SkeletonCommand.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)
                     ),
                 str_contains($file,
-                    $this->determineSeparator('database/migrations/create_skeleton_table.php.stub')) => File::move($file, Str::of($file)->replace('skeleton', config('filament-plugin.store.package_slug'))
+                    $this->determineSeparator('database/migrations/create_skeleton_table.php.stub')) => File::move($file, Str::of($file)->replace('skeleton', $this->packageSlug)
                     ),
                 str_contains(
                     $file,
-                    $this->determineSeparator('config/skeleton.php')) => File::move($file, Str::of($file)->replace('skeleton', config('filament-plugin.store.package_slug'))
+                    $this->determineSeparator('config/skeleton.php')) => File::move($file, Str::of($file)->replace('skeleton', $this->packageSlug)
                     ),
-                str_contains($file, 'README.md') => $this->removeReadmeParagraphs($file),
                 default => [],
             };
         }
 
-        if (config('filament-plugin.store.no_phpstan')) {
+        if (config('hydro.store.no_phpstan')) {
             File::delete($this->projectPath.'/phpstan.neon.dist');
             File::delete($this->projectPath.'/phpstan-baseline.neon');
             File::delete($this->projectPath.'/.github/workflows/phpstan.yml');
@@ -158,7 +187,7 @@ class ProcessPluginStubs
             ]);
         }
 
-        if (config('filament-plugin.store.no_pint')) {
+        if (config('hydro.store.no_pint')) {
             File::delete($this->projectPath.'/.github/workflows/fix-php-code-style-issues.yml');
 
             $this->removeComposerDeps([
@@ -170,18 +199,18 @@ class ProcessPluginStubs
             ]);
         }
 
-        if (config('filament-plugin.store.no_changelog_workflow')) {
+        if (config('hydro.store.no_changelog_workflow')) {
             File::delete($this->projectPath.'/.github/workflows/update-changelog.yml');
             File::delete($this->projectPath.'/CHANGELOG.md');
         }
 
-        if (config('filament-plugin.store.no_ray')) {
+        if (config('hydro.store.no_ray')) {
             $this->removeComposerDeps([
                 'spatie/laravel-ray',
             ]);
         }
 
-        if (config('filament-plugin.store.no_dependabot')) {
+        if (config('hydro.store.no_dependabot')) {
             File::delete($this->projectPath.'/.github/workflows/dependabot-auto-merge.yml');
             File::delete($this->projectPath.'/.github/dependabot.yml');
         }
@@ -217,16 +246,6 @@ class ProcessPluginStubs
     private function determineSeparator(string $path): string
     {
         return str_replace('/', DIRECTORY_SEPARATOR, $path);
-    }
-
-    private function removeReadmeParagraphs(string $file): void
-    {
-        $contents = file_get_contents($file);
-
-        file_put_contents(
-            $file,
-            preg_replace('/<!--delete-->.*<!--\/delete-->/s', '', $contents) ?: $contents
-        );
     }
 
     private function removeComposerDeps(array $names): void

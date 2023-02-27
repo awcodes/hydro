@@ -11,8 +11,8 @@ class DisplayWelcome
  / __/ /\/ / /_/ / / / / / /  __/ / / / /_
 /_/   /\/_/\__,_/_/ /_/ /_/\___/_/ /_/\__/';
 
-    protected string $welcomeText = "
-🦒 <fg=#eab308;bg=default>Filament Plugin CLI (:version:):</> Quickly scaffold plugins for your next Filament App.";
+    protected string $welcomeText = '
+🦒 <fg=#eab308;bg=default> Hydro (:version:):</> A Filament Plugin CLI.';
 
     public function __construct()
     {

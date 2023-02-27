@@ -9,7 +9,7 @@ class DisplayHelpScreen
     public function __invoke(): void
     {
         app('console-writer')->text("\n <comment>Usage:</comment>{$this->createCliStringForCommandUsage()}");
-        app('console-writer')->text("\n <comment>Options (filament-plugin new myPlugin):</comment>{$this->createCliStringForOptionDescriptions()}");
+        app('console-writer')->text("\n <comment>Options (hydro new myPlugin):</comment>{$this->createCliStringForOptionDescriptions()}");
     }
 
     public function createCliStringForOptionDescriptions(): string
@@ -31,11 +31,11 @@ class DisplayHelpScreen
     {
         return collect([
             [
-                'usage' => 'filament-plugin new myPlugin [options]',
+                'usage' => 'hydro new myPlugin [options]',
                 'description' => 'Scaffold a new Filament plugin',
             ],
         ])->reduce(function ($carry, $command) {
-            return $carry.sprintf("\n   <info>%-40s</info> %s", $command['usage'], $command['description']);
+            return $carry.sprintf("\n   <info>%-32s</info> %s", $command['usage'], $command['description']);
         });
     }
 }

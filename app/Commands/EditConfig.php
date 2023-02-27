@@ -4,7 +4,7 @@ namespace App\Commands;
 
 use App\Actions\EditConfigFile;
 use App\Config\CommandLineConfiguration;
-use App\Config\FilamentPluginConfiguration;
+use App\Config\HydroConfiguration;
 use App\Config\SavedConfiguration;
 use App\Config\SetConfig;
 use App\Config\ShellConfiguration;
@@ -23,15 +23,15 @@ class EditConfig extends BaseCommand
         });
 
         $commandLineConfiguration = new CommandLineConfiguration([
-            'editor' => FilamentPluginConfiguration::EDITOR,
+            'editor' => HydroConfiguration::EDITOR,
         ]);
 
         $savedConfiguration = new SavedConfiguration([
-            'CODEEDITOR' => FilamentPluginConfiguration::EDITOR,
+            'CODEEDITOR' => HydroConfiguration::EDITOR,
         ]);
 
         $shellConfiguration = new ShellConfiguration([
-            'EDITOR' => FilamentPluginConfiguration::EDITOR,
+            'EDITOR' => HydroConfiguration::EDITOR,
         ]);
 
         (new SetConfig(
@@ -41,7 +41,7 @@ class EditConfig extends BaseCommand
             app('console-writer'),
             $this->input
         ))([
-            FilamentPluginConfiguration::EDITOR => 'nano',
+            HydroConfiguration::EDITOR => 'nano',
         ]);
 
         try {

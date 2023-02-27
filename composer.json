@@ -1,13 +1,13 @@
 {
-    "name": "awcodes/filament-plugin",
+    "name": "awcodes/hydro",
     "description": "This is a command-line tool that replaces the need to use Filament's Plugin Skeleton through GitHub by allowing local setup of your plugin from the start.",
     "keywords": ["filament", "plugin", "console", "cli"],
-    "homepage": "https://github.com/awcodes/filament-plugin",
+    "homepage": "https://github.com/awcodes/hydro",
     "type": "project",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/awcodes/filament-plugin",
-        "source": "https://github.com/awcodes/filament-plugin"
+        "issues": "https://github.com/awcodes/hydro",
+        "source": "https://github.com/awcodes/hydro"
     },
     "authors": [
         {
@@ -47,5 +47,5 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "bin": ["filament-plugin"]
+    "bin": ["hydro"]
 }

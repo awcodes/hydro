@@ -17,8 +17,8 @@ class Shell
 
     public function __construct(Repository $config, ConsoleWriter $consoleWriter)
     {
-        $this->rootPath = $config->get('filament-plugin.store.root_path');
-        $this->projectPath = $config->get('filament-plugin.store.project_path');
+        $this->rootPath = $config->get('hydro.store.root_path');
+        $this->projectPath = $config->get('hydro.store.project_path');
         $this->consoleWriter = $consoleWriter;
     }
 

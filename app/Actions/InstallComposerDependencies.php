@@ -34,6 +34,6 @@ class InstallComposerDependencies
 
     public function withQuiet(): string
     {
-        return config('filament-plugin.store.with_output') ? '' : ' --quiet';
+        return config('hydro.store.with_output') ? '' : ' --quiet';
     }
 }

@@ -4,7 +4,9 @@ namespace App\Commands;
 
 use App\ConsoleWriter;
 use Carbon\Carbon;
+use Dotenv\Dotenv;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
 use IntlTimeZone;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -65,11 +67,12 @@ trait Debug
         $this->consoleWriter->sectionTitle('Computed configuration');
 
         $this->consoleWriter->text([
-            'The following is the configuration Filament Plugin has computed by merging:',
+            'The following is the configuration Hydro has computed by merging:',
         ]);
 
         $this->consoleWriter->listing([
             'command line parameters',
+            'saved configuration',
             'shell environment variables',
         ]);
 
@@ -78,7 +81,7 @@ trait Debug
         $this->consoleWriter->sectionTitle('Pre-flight Configuration');
 
         $this->consoleWriter->newLine();
-        $this->consoleWriter->text('Raw commmand line:');
+        $this->consoleWriter->text('Raw command line:');
         $this->arrayToTable(
             $_SERVER['argv'],
         );
@@ -95,23 +98,22 @@ trait Debug
                 'message',
                 'github',
                 'gh-public',
-                'gh-description',
                 'gh-homepage',
                 'gh-org',
                 'force',
                 'quiet',
                 'projectName',
                 'target',
-                'author-name',
-                'author-email',
-                'author-username',
-                'vendor-name',
+                'author',
+                'email',
+                'username',
+                'vendor',
                 'vendor-slug',
                 'vendor-namespace',
-                'package-name',
+                'package',
                 'package-slug',
-                'package-class-name',
-                'package-description',
+                'classname',
+                'description',
                 'no-phpstan',
                 'no-pint',
                 'no-dependabot',
@@ -124,6 +126,28 @@ trait Debug
             '--'
         );
 
+        $this->consoleWriter->text('Saved configuration:');
+
+        $savedConfig = [];
+        if (File::isFile(config('home_dir').'/.hydro/config')) {
+            $savedConfig = Dotenv::createMutable(config('home_dir').'/.hydro', 'config')->load();
+        }
+        $this->arrayToTable(
+            $savedConfig,
+            [
+                'PROJECTPATH',
+                'MESSAGE',
+                'CODEEDITOR',
+                'FILAMENTVERSION',
+                'NAME',
+                'EMAIL',
+                'USERNAME',
+                'VENDOR',
+                'VENDORSLUG',
+                'VENDORNAMESPACE',
+            ]
+        );
+
         $this->consoleWriter->text('Shell environment variables:');
         $this->arrayToTable($_SERVER, ['EDITOR'], '$');
 
@@ -134,8 +158,8 @@ trait Debug
 
     protected function configToTable(): void
     {
-        $config = Arr::prepend(config('filament-plugin.store'), config('home_dir'), 'home_dir');
-        $this->arrayToTable($this->dotFlatten('filament-plugin.store', $config));
+        $config = Arr::prepend(config('hydro.store'), config('home_dir'), 'home_dir');
+        $this->arrayToTable($this->dotFlatten('hydro.store', $config));
     }
 
     private function dotFlatten($prefix, $array): array

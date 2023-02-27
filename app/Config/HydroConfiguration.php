@@ -4,7 +4,7 @@ namespace App\Config;
 
 use Illuminate\Support\Str;
 
-abstract class FilamentPluginConfiguration
+abstract class HydroConfiguration
 {
     public const TARGET = 'target';
 
@@ -24,33 +24,25 @@ abstract class FilamentPluginConfiguration
 
     public const GITHUB_PUBLIC = 'github_public';
 
-    public const GITHUB_DESCRIPTION = 'github_description';
-
     public const GITHUB_HOMEPAGE = 'github_homepage';
 
     public const GITHUB_ORGANIZATION = 'github_organization';
 
     public const COMMAND = 'command';
 
-    public const AUTHOR_NAME = 'author_name';
+    public const AUTHOR = 'author';
 
-    public const AUTHOR_EMAIL = 'author_email';
+    public const EMAIL = 'email';
 
-    public const AUTHOR_USERNAME = 'author_username';
+    public const USERNAME = 'username';
 
-    public const VENDOR_NAME = 'vendor_name';
+    public const VENDOR = 'vendor';
 
     public const VENDOR_SLUG = 'vendor_slug';
 
     public const VENDOR_NAMESPACE = 'vendor_namespace';
 
-    public const PACKAGE_NAME = 'package_name';
-
-    public const PACKAGE_SLUG = 'package_slug';
-
-    public const PACKAGE_CLASS_NAME = 'package_class_name';
-
-    public const PACKAGE_DESCRIPTION = 'package_description';
+    public const DESCRIPTION = 'description';
 
     public const PHPSTAN = 'no_phpstan';
 

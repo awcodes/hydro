@@ -37,11 +37,11 @@ class InitializeGitHubRepository
             $this->consoleWriter->warn(self::WARNING_FAILED_TO_CREATE_REPOSITORY);
             $this->consoleWriter->warnCommandFailed($process->getCommandLine());
             $this->consoleWriter->showOutputErrors($process->getErrorOutput());
-            config(['filament-plugin.store.push_to_github' => false]);
+            config(['hydro.store.push_to_github' => false]);
 
             return;
         }
-        config(['filament-plugin.store.push_to_github' => true]);
+        config(['hydro.store.push_to_github' => true]);
 
         $this->consoleWriter->success('Successfully created new GitHub repository');
     }

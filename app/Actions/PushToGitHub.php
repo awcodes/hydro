@@ -19,7 +19,7 @@ class PushToGitHub
 
     public function __invoke(): void
     {
-        if (! (config('filament-plugin.store.push_to_github'))) {
+        if (! (config('hydro.store.push_to_github'))) {
             return;
         }
 

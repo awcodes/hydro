@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File;
 class EditConfigFile
 {
     use AbortsCommands;
+
     public function __construct(
         protected Shell $shell
     ) {
@@ -19,7 +20,7 @@ class EditConfigFile
      */
     public function __invoke(string $fileName): void
     {
-        $configDir = config('home_dir').'/.filament-plugin';
+        $configDir = config('home_dir').'/.hydro';
         $configFilePath = $configDir.'/'.$fileName;
 
         if (! File::isDirectory($configDir)) {
@@ -32,7 +33,7 @@ class EditConfigFile
             $this->abortIf(! File::put($configFilePath, File::get(base_path("stubs/{$fileName}"))), "I could not create the configuration file: {$configFilePath}.");
         }
 
-        $process = $this->shell->withTTY()->execIn($configDir, config('filament-plugin.store.editor')." {$fileName}");
+        $process = $this->shell->withTTY()->execIn($configDir, config('hydro.store.editor')." {$fileName}");
 
         $this->abortIf(! $process->isSuccessful(), "I could not open {$configFilePath} for editing.", $process);
     }

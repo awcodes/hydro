@@ -2,7 +2,7 @@
 
 namespace App\Actions\Concerns;
 
-use App\Config\FilamentPluginConfiguration;
+use App\Config\HydroConfiguration;
 use Exception;
 
 trait InteractsWithGitHub
@@ -14,12 +14,12 @@ trait InteractsWithGitHub
 
     protected static function gitHubInitializationRequested(): bool
     {
-        return config('filament-plugin.store.'.FilamentPluginConfiguration::INITIALIZE_GITHUB) === true;
+        return config('hydro.store.'.HydroConfiguration::INITIALIZE_GITHUB) === true;
     }
 
     protected static function getDescription(): string
     {
-        $description = config('filament-plugin.store.'.FilamentPluginConfiguration::GITHUB_DESCRIPTION);
+        $description = config('hydro.store.'.HydroConfiguration::PACKAGE_DESCRIPTION);
 
         if (is_null($description)) {
             return '';
@@ -30,7 +30,7 @@ trait InteractsWithGitHub
 
     protected static function getHomepage(): string
     {
-        $homepage = config('filament-plugin.store.'.FilamentPluginConfiguration::GITHUB_HOMEPAGE);
+        $homepage = config('hydro.store.'.HydroConfiguration::GITHUB_HOMEPAGE);
 
         if (is_null($homepage)) {
             return '';
@@ -48,7 +48,7 @@ trait InteractsWithGitHub
             return sprintf(
                 'gh repo create%s --confirm %s%s%s',
                 static::getRepositoryName(),
-                config('filament-plugin.store.github_public') ? ' --public' : ' --private',
+                config('hydro.store.github_public') ? ' --public' : ' --private',
                 static::getDescription(),
                 static::getHomepage(),
             );
@@ -57,7 +57,7 @@ trait InteractsWithGitHub
         if (static::hubInstalled()) {
             return sprintf(
                 'hub create %s%s%s%s',
-                config('filament-plugin.store.github_public') ? '' : '--private ',
+                config('hydro.store.github_public') ? '' : '--private ',
                 static::getDescription(),
                 static::getHomepage(),
                 static::getRepositoryName()
@@ -69,20 +69,20 @@ trait InteractsWithGitHub
 
     protected static function getRepositoryName(): string
     {
-        $name = config('filament-plugin.store.project_name');
-        $organization = config('filament-plugin.store.'.FilamentPluginConfiguration::GITHUB_ORGANIZATION);
+        $name = config('hydro.store.project_name');
+        $organization = config('hydro.store.'.HydroConfiguration::GITHUB_ORGANIZATION);
 
         return $organization ? " $organization/$name" : " $name";
     }
 
     protected static function ghInstalled(): bool
     {
-        return config('filament-plugin.store.tools.gh') === true;
+        return config('hydro.store.tools.gh') === true;
     }
 
     protected static function hubInstalled(): bool
     {
-        return config('filament-plugin.store.tools.hub') === true;
+        return config('hydro.store.tools.hub') === true;
     }
 
     protected static function gitHubToolingInstalled(): bool

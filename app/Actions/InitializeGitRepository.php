@@ -26,15 +26,15 @@ class InitializeGitRepository
 
             $this->exec(sprintf(
                 'git init%s',
-                config('filament-plugin.store.with_output') ? '' : ' --quiet',
+                config('hydro.store.with_output') ? '' : ' --quiet',
             ));
 
             $this->exec('git add .');
 
             $this->exec(sprintf(
                 "git commit%s -m '%s'",
-                config('filament-plugin.store.with_output') ? '' : ' --quiet',
-                config('filament-plugin.store.commit_message')
+                config('hydro.store.with_output') ? '' : ' --quiet',
+                config('hydro.store.commit_message')
             ));
 
             $this->consoleWriter->success('New git repository initialized.');

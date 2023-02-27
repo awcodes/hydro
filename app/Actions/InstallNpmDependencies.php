@@ -34,6 +34,6 @@ class InstallNpmDependencies
 
     public function withQuiet(): string
     {
-        return config('filament-plugin.store.with_output') ? '' : ' --silent';
+        return config('hydro.store.with_output') ? '' : ' --silent';
     }
 }

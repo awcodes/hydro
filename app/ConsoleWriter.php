@@ -160,7 +160,7 @@ class ConsoleWriter extends OutputStyle
 
     public function consoleOutput(string $line, $type)
     {
-        if (! config('filament-plugin.store.with_output')) {
+        if (! config('hydro.store.with_output')) {
             ($type === Process::ERR)
                 ? $this->consoleLabeledLine('!️', '┃ '.$line, 'fg=yellow')
                 : $this->consoleLabeledLine('✓︎', '┃ '.$line, 'fg=green;');

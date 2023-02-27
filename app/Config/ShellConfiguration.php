@@ -2,7 +2,7 @@
 
 namespace App\Config;
 
-class ShellConfiguration extends FilamentPluginConfiguration
+class ShellConfiguration extends HydroConfiguration
 {
     protected function getSettings(): array
     {

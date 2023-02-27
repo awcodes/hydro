@@ -22,28 +22,28 @@ class VerifyPathAvailable
     {
         $this->consoleWriter->logStep('Verifying path availability...');
 
-        $rootPath = config('filament-plugin.store.root_path');
+        $rootPath = config('hydro.store.root_path');
 
         if (! File::isDirectory($rootPath)) {
-            throw new Exception("{$rootPath} is not a directory.");
+            throw new Exception("$rootPath is not a directory.");
         }
 
-        $projectPath = config('filament-plugin.store.project_path');
+        $projectPath = config('hydro.store.project_path');
 
         if (empty($projectPath)) {
-            throw new Exception("Configuration 'filament-plugin.store.project_path' cannot be null or an empty string.");
+            throw new Exception("Configuration 'hydro.store.project_path' cannot be null or an empty string.");
         }
 
         if (File::isDirectory($projectPath)) {
-            if (! config('filament-plugin.store.force_create')) {
-                throw new Exception("{$projectPath} is already a directory.");
+            if (! config('hydro.store.force_create')) {
+                throw new Exception("$projectPath is already a directory.");
             }
 
             if (! File::deleteDirectory($projectPath)) {
-                throw new Exception("{$projectPath} is already a directory and, although the force option was specified, deletion failed.");
+                throw new Exception("$projectPath is already a directory and, although the force option was specified, deletion failed.");
             }
         }
 
-        $this->consoleWriter->success("Directory '$projectPath' is available.");
+        $this->consoleWriter->success("Directory <span class=\"text-sky-500\">$projectPath</span> is available.");
     }
 }

@@ -13,8 +13,8 @@ class OpenInEditor
     public function __construct(
         protected Shell $shell,
         protected ConsoleWriter $consoleWriter
-    )
-    {}
+    ) {
+    }
 
     /**
      * @throws Exception
@@ -23,9 +23,9 @@ class OpenInEditor
     {
         $this->consoleWriter->logStep('Opening In Editor...');
 
-        $process = $this->shell->withTTY()->execInProject(sprintf('%s .', config('filament-plugin.store.editor')));
-        $this->abortIf(! $process->isSuccessful(), sprintf('Failed to open editor %s', config('filament-plugin.store.editor')), $process);
+        $process = $this->shell->withTTY()->execInProject(sprintf('%s .', config('hydro.store.editor')));
+        $this->abortIf(! $process->isSuccessful(), sprintf('Failed to open editor %s', config('hydro.store.editor')), $process);
 
-        $this->consoleWriter->success('Opening your project in ' . config('filament-plugin.store.editor'));
+        $this->consoleWriter->success('Opening your project in '.config('hydro.store.editor'));
     }
 }

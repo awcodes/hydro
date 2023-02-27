@@ -3,7 +3,7 @@
 namespace App\Actions;
 
 use App\Actions\Concerns\InteractsWithGitHub;
-use App\Config\FilamentPluginConfiguration;
+use App\Config\HydroConfiguration;
 use App\ConsoleWriter;
 use App\Shell;
 
@@ -39,7 +39,8 @@ class ValidateGitHubConfiguration
     public function __invoke(): void
     {
         if (! static::gitHubInitializationRequested()) {
-            config(['filament-plugin.store.' . FilamentPluginConfiguration::INITIALIZE_GITHUB => false]);
+            config(['hydro.store.'.HydroConfiguration::INITIALIZE_GITHUB => false]);
+
             return;
         }
 
@@ -47,11 +48,13 @@ class ValidateGitHubConfiguration
             $this->consoleWriter->warn(self::WARNING_UNABLE_TO_CREATE_REPOSITORY);
             $this->consoleWriter->text(self::INSTRUCTIONS_GITHUB_TOOLING_MISSING);
             $this->askToContinueWithoutGitHubSetup();
+
             return;
         }
 
         if (static::hubInstalled()) {
             $this->consoleWriter->note(sprintf(self::SELECTED_GITHUB_TOOL_MESSAGE_PATTERN, 'hub'));
+
             return;
         }
 
@@ -59,6 +62,7 @@ class ValidateGitHubConfiguration
             $this->consoleWriter->warn(self::WARNING_UNABLE_TO_CREATE_REPOSITORY);
             $this->consoleWriter->text(self::INSTRUCTIONS_GH_NOT_AUTHENTICATED);
             $this->askToContinueWithoutGitHubSetup();
+
             return;
         }
 
@@ -67,7 +71,7 @@ class ValidateGitHubConfiguration
 
     private function askToContinueWithoutGitHubSetup(): void
     {
-        config(['filament-plugin.store.' . FilamentPluginConfiguration::INITIALIZE_GITHUB => false]);
+        config(['hydro.store.'.HydroConfiguration::INITIALIZE_GITHUB => false]);
 
         if (! app('console')->confirm(self::QUESTION_SHOULD_CONTINUE)) {
             exit;

@@ -24,7 +24,7 @@ trait InteractsWithNpm
      */
     private function installNodeDependencies(): void
     {
-        $process = app(Shell::class)->execInProject('npm install'.(config('filament-plugin.store.with_output') ? ''
+        $process = app(Shell::class)->execInProject('npm install'.(config('hydro.store.with_output') ? ''
                 : ' --silent'));
         $this->abortIf(! $process->isSuccessful(), 'Installation of npm dependencies did not complete successfully', $process);
     }
@@ -34,7 +34,7 @@ trait InteractsWithNpm
      */
     private function compileNodeDependencies(): void
     {
-        $process = app(Shell::class)->execInProject('npm run build'.(config('filament-plugin.store.with_output') ? '' : ' --silent'));
+        $process = app(Shell::class)->execInProject('npm run build'.(config('hydro.store.with_output') ? '' : ' --silent'));
         $this->abortIf(! $process->isSuccessful(), 'Compilation of project assets did not complete successfully', $process);
     }
 }

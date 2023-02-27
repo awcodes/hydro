@@ -8,7 +8,6 @@ use App\ConsoleWriter;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 class SetConfig
 {
@@ -48,16 +47,26 @@ class SetConfig
         foreach ($defaultConfiguration as $configurationKey => $default) {
             $methodName = 'get'.Str::of($configurationKey)->studly();
             if (method_exists($this, $methodName)) {
-                config(["filament-plugin.store.$configurationKey" => $this->$methodName($configurationKey,
+                config(["hydro.store.$configurationKey" => $this->$methodName($configurationKey,
                     $default)]);
             } else {
-                config(["filament-plugin.store.$configurationKey" => $this->get($configurationKey, $default)]);
+                config(["hydro.store.$configurationKey" => $this->get($configurationKey, $default)]);
             }
         }
 
-        if (config('filament-plugin.store.command') === NewCommand::class) {
-            $projectPath = config('filament-plugin.store.root_path').'/'.Str::of(config('filament-plugin.store.plugin_name'))->slug();
-            config(['filament-plugin.store.project_path' => $projectPath]);
+        if (config('hydro.store.command') === NewCommand::class) {
+            $pluginNameRaw = config('hydro.store.plugin_name');
+            $pluginSlug = Str::of($pluginNameRaw)->kebab()->toString();
+            $pluginName = Str::of($pluginSlug)->replace('-', ' ')->title()->toString();
+            $className = Str::of($pluginName)->replace(' ', '')->toString();
+            $projectPath = config('hydro.store.root_path').'/'.$pluginSlug;
+
+            config([
+                'hydro.store.project_path' => $projectPath,
+                'hydro.store.plugin_name' => $pluginName,
+                'hydro.store.plugin_slug' => $pluginSlug,
+                'hydro.store.plugin_classname' => $className,
+            ]);
         }
     }
 

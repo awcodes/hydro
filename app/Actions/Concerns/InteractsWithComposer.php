@@ -26,7 +26,7 @@ trait InteractsWithComposer
             'composer require %s%s%s',
             $package,
             $forDev ? ' --dev' : '',
-            config('filament-plugin.with_output') ? '' : ' --quiet'
+            config('hydro.with_output') ? '' : ' --quiet'
         );
     }
 }

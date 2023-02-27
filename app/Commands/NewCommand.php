@@ -17,7 +17,7 @@ use App\Actions\VerifyDependencies;
 use App\Actions\VerifyPathAvailable;
 use App\Actions\VerifyPluginDetails;
 use App\Config\CommandLineConfiguration;
-use App\Config\FilamentPluginConfiguration;
+use App\Config\HydroConfiguration;
 use App\Config\SavedConfiguration;
 use App\Config\SetConfig;
 use App\Config\ShellConfiguration;
@@ -26,8 +26,7 @@ use App\Options;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use function Termwind\terminal;
-use function Termwind\render;
+use function Termwind\{terminal};
 
 class NewCommand extends BaseCommand
 {
@@ -94,7 +93,6 @@ class NewCommand extends BaseCommand
             app(VerifyDependencies::class)();
             app(VerifyPathAvailable::class)();
             app(VerifyPluginDetails::class)();
-            exit;
             app(CopySkeletonToProject::class)();
             app(ProcessPluginStubs::class)();
             app(InstallNpmDependencies::class)();
@@ -128,56 +126,52 @@ class NewCommand extends BaseCommand
      */
     private function setConfig(): void
     {
-        config(['filament-plugin.store' => []]);
+        config(['hydro.store' => []]);
 
         $commandLineConfiguration = new CommandLineConfiguration([
-            'editor' => FilamentPluginConfiguration::EDITOR,
-            'message' => FilamentPluginConfiguration::COMMIT_MESSAGE,
-            'path' => FilamentPluginConfiguration::ROOT_PATH,
-            'force' => FilamentPluginConfiguration::FORCE_CREATE,
-            'with-output' => FilamentPluginConfiguration::WITH_OUTPUT,
-            'github' => FilamentPluginConfiguration::INITIALIZE_GITHUB,
-            'gh-public' => FilamentPluginConfiguration::GITHUB_PUBLIC,
-            'gh-description' => FilamentPluginConfiguration::GITHUB_DESCRIPTION,
-            'gh-homepage' => FilamentPluginConfiguration::GITHUB_HOMEPAGE,
-            'gh-org' => FilamentPluginConfiguration::GITHUB_ORGANIZATION,
-            'pluginName' => FilamentPluginConfiguration::PLUGIN_NAME,
-            'target' => FilamentPluginConfiguration::TARGET,
-            'author-name' => FilamentPluginConfiguration::AUTHOR_NAME,
-            'author-email' => FilamentPluginConfiguration::AUTHOR_EMAIL,
-            'author-username' => FilamentPluginConfiguration::AUTHOR_USERNAME,
-            'vendor-name' => FilamentPluginConfiguration::VENDOR_NAME,
-            'vendor-slug' => FilamentPluginConfiguration::VENDOR_SLUG,
-            'vendor-namespace' => FilamentPluginConfiguration::VENDOR_NAMESPACE,
-            'package-name' => FilamentPluginConfiguration::PACKAGE_NAME,
-            'package-slug' => FilamentPluginConfiguration::PACKAGE_SLUG,
-            'package-class-name' => FilamentPluginConfiguration::PACKAGE_CLASS_NAME,
-            'package-description' => FilamentPluginConfiguration::PACKAGE_DESCRIPTION,
-            'no-phpstan' => FilamentPluginConfiguration::PHPSTAN,
-            'no-pint' => FilamentPluginConfiguration::PINT,
-            'no-dependabot' => FilamentPluginConfiguration::DEPENDABOT,
-            'no-ray' => FilamentPluginConfiguration::RAY,
-            'no-changelog-workflow' => FilamentPluginConfiguration::CHANGELOG_WORKFLOW,
-            'theme' => FilamentPluginConfiguration::THEME,
-            'for-forms' => FilamentPluginConfiguration::FOR_FORMS,
-            'for-tables' => FilamentPluginConfiguration::FOR_TABLES,
+            'editor' => HydroConfiguration::EDITOR,
+            'message' => HydroConfiguration::COMMIT_MESSAGE,
+            'path' => HydroConfiguration::ROOT_PATH,
+            'force' => HydroConfiguration::FORCE_CREATE,
+            'with-output' => HydroConfiguration::WITH_OUTPUT,
+            'github' => HydroConfiguration::INITIALIZE_GITHUB,
+            'gh-public' => HydroConfiguration::GITHUB_PUBLIC,
+            'gh-homepage' => HydroConfiguration::GITHUB_HOMEPAGE,
+            'gh-org' => HydroConfiguration::GITHUB_ORGANIZATION,
+            'pluginName' => HydroConfiguration::PLUGIN_NAME,
+            'target' => HydroConfiguration::TARGET,
+            'author' => HydroConfiguration::AUTHOR,
+            'email' => HydroConfiguration::EMAIL,
+            'username' => HydroConfiguration::USERNAME,
+            'vendor' => HydroConfiguration::VENDOR,
+            'vendor-slug' => HydroConfiguration::VENDOR_SLUG,
+            'vendor-namespace' => HydroConfiguration::VENDOR_NAMESPACE,
+            'description' => HydroConfiguration::DESCRIPTION,
+            'no-phpstan' => HydroConfiguration::PHPSTAN,
+            'no-pint' => HydroConfiguration::PINT,
+            'no-dependabot' => HydroConfiguration::DEPENDABOT,
+            'no-ray' => HydroConfiguration::RAY,
+            'no-changelog-workflow' => HydroConfiguration::CHANGELOG_WORKFLOW,
+            'theme' => HydroConfiguration::THEME,
+            'for-forms' => HydroConfiguration::FOR_FORMS,
+            'for-tables' => HydroConfiguration::FOR_TABLES,
         ]);
 
         $savedConfiguration = new SavedConfiguration([
-            'PROJECTPATH' => FilamentPluginConfiguration::ROOT_PATH,
-            'MESSAGE' => FilamentPluginConfiguration::COMMIT_MESSAGE,
-            'CODEEDITOR' => FilamentPluginConfiguration::EDITOR,
-            'AUTHORNAME' => FilamentPluginConfiguration::AUTHOR_NAME,
-            'AUTHOREMAIL' => FilamentPluginConfiguration::AUTHOR_EMAIL,
-            'AUTHORUSERNAME' => FilamentPluginConfiguration::AUTHOR_USERNAME,
-            'FILAMENTTARGET' => FilamentPluginConfiguration::TARGET,
-            'VENDORNAME' => FilamentPluginConfiguration::VENDOR_NAME,
-            'VENDORSLUG' => FilamentPluginConfiguration::VENDOR_SLUG,
-            'VENDORNAMESPACE' => FilamentPluginConfiguration::VENDOR_NAMESPACE,
+            'PROJECTPATH' => HydroConfiguration::ROOT_PATH,
+            'MESSAGE' => HydroConfiguration::COMMIT_MESSAGE,
+            'CODEEDITOR' => HydroConfiguration::EDITOR,
+            'AUTHOR' => HydroConfiguration::AUTHOR,
+            'EMAIL' => HydroConfiguration::EMAIL,
+            'USERNAME' => HydroConfiguration::USERNAME,
+            'FILAMENTTARGET' => HydroConfiguration::TARGET,
+            'VENDOR' => HydroConfiguration::VENDOR,
+            'VENDORSLUG' => HydroConfiguration::VENDOR_SLUG,
+            'VENDORNAMESPACE' => HydroConfiguration::VENDOR_NAMESPACE,
         ]);
 
         $shellConfiguration = new ShellConfiguration([
-            'EDITOR' => FilamentPluginConfiguration::EDITOR,
+            'EDITOR' => HydroConfiguration::EDITOR,
         ]);
 
         (new SetConfig(
@@ -187,37 +181,33 @@ class NewCommand extends BaseCommand
             $this->consoleWriter,
             $this->input
         ))([
-            FilamentPluginConfiguration::COMMAND => self::class,
-            FilamentPluginConfiguration::TARGET => '2.x',
-            FilamentPluginConfiguration::EDITOR => 'pstorm',
-            FilamentPluginConfiguration::COMMIT_MESSAGE => 'Initial commit',
-            FilamentPluginConfiguration::ROOT_PATH => getcwd(),
-            FilamentPluginConfiguration::FORCE_CREATE => false,
-            FilamentPluginConfiguration::WITH_OUTPUT => false,
-            FilamentPluginConfiguration::INITIALIZE_GITHUB => false,
-            FilamentPluginConfiguration::GITHUB_PUBLIC => false,
-            FilamentPluginConfiguration::PLUGIN_NAME => null,
-            FilamentPluginConfiguration::GITHUB_DESCRIPTION => null,
-            FilamentPluginConfiguration::GITHUB_HOMEPAGE => null,
-            FilamentPluginConfiguration::GITHUB_ORGANIZATION => null,
-            FilamentPluginConfiguration::PHPSTAN => true,
-            FilamentPluginConfiguration::PINT => true,
-            FilamentPluginConfiguration::DEPENDABOT => true,
-            FilamentPluginConfiguration::RAY => true,
-            FilamentPluginConfiguration::CHANGELOG_WORKFLOW => true,
-            FilamentPluginConfiguration::THEME => false,
-            FilamentPluginConfiguration::FOR_FORMS => false,
-            FilamentPluginConfiguration::FOR_TABLES => false,
-            FilamentPluginConfiguration::AUTHOR_NAME => null,
-            FilamentPluginConfiguration::AUTHOR_EMAIL => null,
-            FilamentPluginConfiguration::AUTHOR_USERNAME => null,
-            FilamentPluginConfiguration::VENDOR_NAME => null,
-            FilamentPluginConfiguration::VENDOR_SLUG => null,
-            FilamentPluginConfiguration::VENDOR_NAMESPACE => null,
-            FilamentPluginConfiguration::PACKAGE_NAME => null,
-            FilamentPluginConfiguration::PACKAGE_SLUG => null,
-            FilamentPluginConfiguration::PACKAGE_CLASS_NAME => null,
-            FilamentPluginConfiguration::PACKAGE_DESCRIPTION => null,
+            HydroConfiguration::COMMAND => self::class,
+            HydroConfiguration::ROOT_PATH => getcwd(),
+            HydroConfiguration::FORCE_CREATE => false,
+            HydroConfiguration::WITH_OUTPUT => false,
+            HydroConfiguration::TARGET => '2.x',
+            HydroConfiguration::EDITOR => 'nano',
+            HydroConfiguration::AUTHOR => null,
+            HydroConfiguration::EMAIL => null,
+            HydroConfiguration::USERNAME => null,
+            HydroConfiguration::VENDOR => null,
+            HydroConfiguration::VENDOR_SLUG => null,
+            HydroConfiguration::VENDOR_NAMESPACE => null,
+            HydroConfiguration::DESCRIPTION => null,
+            HydroConfiguration::PHPSTAN => true,
+            HydroConfiguration::PINT => true,
+            HydroConfiguration::DEPENDABOT => true,
+            HydroConfiguration::RAY => true,
+            HydroConfiguration::CHANGELOG_WORKFLOW => true,
+            HydroConfiguration::THEME => false,
+            HydroConfiguration::FOR_FORMS => false,
+            HydroConfiguration::FOR_TABLES => false,
+            HydroConfiguration::INITIALIZE_GITHUB => false,
+            HydroConfiguration::COMMIT_MESSAGE => 'Initial commit',
+            HydroConfiguration::GITHUB_PUBLIC => false,
+            HydroConfiguration::PLUGIN_NAME => null,
+            HydroConfiguration::GITHUB_HOMEPAGE => null,
+            HydroConfiguration::GITHUB_ORGANIZATION => null,
         ]);
 
         if ($this->consoleWriter->isDebug()) {

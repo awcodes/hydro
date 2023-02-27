@@ -69,7 +69,6 @@ class VerifyDependencies
 
         $this->abortIf(
             collect($this->dependencies)->reduce(function ($carry, $dependency) {
-
                 [$command, $label, $instructionsUrl] = array_values($dependency);
 
                 if (($installedDependency = $this->finder->find($command)) === null) {
