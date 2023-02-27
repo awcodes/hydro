@@ -93,7 +93,6 @@ class NewCommand extends BaseCommand
             app(VerifyDependencies::class)();
             app(VerifyPathAvailable::class)();
             app(VerifyPluginDetails::class)();
-            app(CopySkeletonToProject::class)();
             app(ProcessPluginStubs::class)();
             app(InstallNpmDependencies::class)();
             app(InstallComposerDependencies::class)();

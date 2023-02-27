@@ -21,9 +21,9 @@
     ],
     "require": {
         "php": "^8.0",
-        "filament/filament": "^3.0",
-        "filament/forms": "^3.0",
-        "filament/tables": "^3.0",
+        "filament/filament": "^:target",
+        "filament/forms": "^:target",
+        "filament/tables": "^:target",
         "spatie/laravel-package-tools": "^1.13.5",
         "illuminate/contracts": "^9.0"
     },

@@ -54,6 +54,11 @@ class VerifyPluginDetails
 
         $this->consoleWriter->newLine();
 
+        $this->abortIf(
+            config('hydro.store.target') === '2.x' && (config('hydro.store.for_forms') || config('hydro.store.for_tables') || config('hydro.store.theme')),
+            "'--for_forms', '--for_tables' and '--theme' are only available for Filament 3.x"
+        );
+
         if (! $this->authorName) {
             $gitName = exec('git config user.name');
             $this->authorName = $this->consoleWriter->ask('Author name', $gitName);

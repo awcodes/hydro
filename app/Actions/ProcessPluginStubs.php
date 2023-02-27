@@ -37,6 +37,8 @@ class ProcessPluginStubs
 
     protected string $packageDescription;
 
+    protected string $target;
+
     public function __construct(
         protected ConsoleWriter $consoleWriter,
         protected Shell $shell,
@@ -52,6 +54,7 @@ class ProcessPluginStubs
         $this->packageSlug = config('hydro.store.plugin_slug');
         $this->packageClassName = config('hydro.store.plugin_classname');
         $this->packageDescription = config('hydro.store.description') ?? '';
+        $this->target = config('hydro.store.target') ?? '2.0';
     }
 
     /**
@@ -61,55 +64,7 @@ class ProcessPluginStubs
     {
         $this->consoleWriter->logStep('Scaffolding plugin...');
 
-        if (config('hydro.store.target') === '3.x') {
-            if (config('hydro.store.for_forms')) {
-                File::delete($this->projectPath.'/src/SkeletonTheme.php');
-
-                $this->removeComposerDeps([
-                    'filament/filament',
-                    'filament/tables',
-                ]);
-            } elseif (config('hydro.store.for_tables')) {
-                File::delete($this->projectPath.'/src/SkeletonTheme.php');
-
-                $this->removeComposerDeps([
-                    'filament/filament',
-                    'filament/forms',
-                ]);
-            } else {
-                if (config('hydro.store.theme')) {
-                    File::delete($this->projectPath.'/src/SkeletonServiceProvider.php');
-                    File::delete($this->projectPath.'/src/Skeleton.php');
-                    File::deleteDirectory($this->projectPath.'/config');
-                    File::deleteDirectory($this->projectPath.'/database');
-                    File::deleteDirectory($this->projectPath.'/stubs');
-                    File::deleteDirectory($this->projectPath.'/resources/js');
-                    File::deleteDirectory($this->projectPath.'/resources/lang');
-                    File::deleteDirectory($this->projectPath.'/resources/views');
-                    File::deleteDirectory($this->projectPath.'/src/Commands');
-                    File::deleteDirectory($this->projectPath.'/src/Facades');
-                } else {
-                    File::delete($this->projectPath.'/src/SkeletonTheme.php');
-                }
-
-                $this->removeComposerDeps([
-                    'filament/forms',
-                    'filament/tables',
-                ]);
-            }
-
-            if (config('hydro.store.theme')) {
-                File::copy($this->projectPath.'/configure-stubs/theme/package.json', $this->projectPath.'/package.json');
-                File::copy($this->projectPath.'/configure-stubs/theme/plugin.css', $this->projectPath.'/resources/css/plugin.css');
-                File::copy($this->projectPath.'/configure-stubs/theme/tailwind.config.js', $this->projectPath.'/tailwind.config.js');
-            } else {
-                File::copy($this->projectPath.'/configure-stubs/package/package.json', $this->projectPath.'/package.json');
-                File::copy($this->projectPath.'/configure-stubs/package/plugin.css', $this->projectPath.'/resources/css/plugin.css');
-                File::copy($this->projectPath.'/configure-stubs/package/tailwind.config.js', $this->projectPath.'/tailwind.config.js');
-            }
-
-            File::deleteDirectory($this->projectPath.'/configure-stubs');
-        }
+        $this->copyStubs();
 
         $this->files = Environment::isWin() ? $this->replaceForWindows() : $this->replaceForAllOtherOSes();
 
@@ -131,40 +86,18 @@ class ProcessPluginStubs
                 'Skeleton' => $this->packageClassName,
                 'skeleton' => $this->packageSlug,
                 ':package_description' => $this->packageDescription,
+                ':target' => Str::replace('x', '0', $this->target),
             ]);
 
             match (true) {
-                str_contains(
-                    $file,
-                    $this->determineSeparator('src/Skeleton.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)
-                    ),
-                str_contains(
-                    $file,
-                    $this->determineSeparator('src/SkeletonTheme.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)
-                    ),
-                str_contains(
-                    $file,
-                    $this->determineSeparator('src/SkeletonServiceProvider.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)
-                    ),
-                str_contains(
-                    $file,
-                    $this->determineSeparator('src/Facades/Skeleton.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)
-                    ),
-                str_contains(
-                    $file,
-                    $this->determineSeparator('src/Testing/TestsSkeleton.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)
-                    ),
-                str_contains(
-                    $file,
-                    $this->determineSeparator('src/Commands/SkeletonCommand.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)
-                    ),
-                str_contains($file,
-                    $this->determineSeparator('database/migrations/create_skeleton_table.php.stub')) => File::move($file, Str::of($file)->replace('skeleton', $this->packageSlug)
-                    ),
-                str_contains(
-                    $file,
-                    $this->determineSeparator('config/skeleton.php')) => File::move($file, Str::of($file)->replace('skeleton', $this->packageSlug)
-                    ),
+                str_contains($file, $this->determineSeparator('src/Skeleton.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)),
+                str_contains($file, $this->determineSeparator('src/SkeletonTheme.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)),
+                str_contains($file, $this->determineSeparator('src/SkeletonServiceProvider.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)),
+                str_contains($file, $this->determineSeparator('src/Facades/Skeleton.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)),
+                str_contains($file, $this->determineSeparator('src/Testing/TestsSkeleton.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)),
+                str_contains($file, $this->determineSeparator('src/Commands/SkeletonCommand.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)),
+                str_contains($file, $this->determineSeparator('database/migrations/create_skeleton_table.php.stub')) => File::move($file, Str::of($file)->replace('skeleton', $this->packageSlug)),
+                str_contains($file, $this->determineSeparator('config/skeleton.php')) => File::move($file, Str::of($file)->replace('skeleton', $this->packageSlug)),
                 default => [],
             };
         }
@@ -217,6 +150,51 @@ class ProcessPluginStubs
 
         $this->consoleWriter->success('Plugin successfully scaffolded.');
         $this->consoleWriter->newLine();
+    }
+
+    private function copyStubs(): void
+    {
+        File::makeDirectory($this->projectPath);
+        File::copyDirectory(__DIR__.'/../../stubs/common', $this->projectPath);
+        File::copyDirectory(__DIR__.'/../../stubs/'.$this->target, $this->projectPath.'/src');
+
+        if (config('hydro.store.theme')) {
+            File::copy(__DIR__.'/../../stubs/'.$this->target.'/SkeletonTheme.php', $this->projectPath.'/src/SkeletonTheme.php');
+            File::copy(__DIR__.'/../../stubs/configure/theme/package.json', $this->projectPath.'/package.json');
+            File::copy(__DIR__.'/../../stubs/configure/theme/plugin.css', $this->projectPath.'/resources/css/plugin.css');
+            File::copy(__DIR__.'/../../stubs/configure/theme/tailwind.config.js', $this->projectPath.'/tailwind.config.js');
+            File::delete($this->projectPath.'/src/Skeleton.php');
+            File::deleteDirectory($this->projectPath.'/config');
+            File::deleteDirectory($this->projectPath.'/database');
+            File::deleteDirectory($this->projectPath.'/stubs');
+            File::deleteDirectory($this->projectPath.'/resources/js');
+            File::deleteDirectory($this->projectPath.'/resources/lang');
+            File::deleteDirectory($this->projectPath.'/resources/views');
+            File::deleteDirectory($this->projectPath.'/src/Commands');
+            File::deleteDirectory($this->projectPath.'/src/Facades');
+        } else {
+            File::copy(__DIR__.'/../../stubs/'.$this->target.'/SkeletonServiceProvider.php', $this->projectPath.'/src/SkeletonServiceProvider.php');
+            File::copy(__DIR__.'/../../stubs/configure/package/package.json', $this->projectPath.'/package.json');
+            File::copy(__DIR__.'/../../stubs/configure/package/plugin.css', $this->projectPath.'/resources/css/plugin.css');
+            File::copy(__DIR__.'/../../stubs/configure/package/tailwind.config.js', $this->projectPath.'/tailwind.config.js');
+        }
+
+        if (config('hydro.store.for_forms')) {
+            $this->removeComposerDeps([
+                'filament/filament',
+                'filament/tables',
+            ]);
+        } elseif (config('hydro.store.for_tables')) {
+            $this->removeComposerDeps([
+                'filament/filament',
+                'filament/forms',
+            ]);
+        } else {
+            $this->removeComposerDeps([
+                'filament/forms',
+                'filament/tables',
+            ]);
+        }
     }
 
     private function replaceForWindows(): array
