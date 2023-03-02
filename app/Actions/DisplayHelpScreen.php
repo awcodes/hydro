@@ -9,7 +9,8 @@ class DisplayHelpScreen
 {
     public function __construct(
         protected ConsoleWriter $consoleWriter
-    ){}
+    ) {
+    }
 
     public function __invoke(): void
     {
