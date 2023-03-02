@@ -2,8 +2,8 @@
 
 namespace App\Config;
 
-use App\Commands\Debug;
 use App\Commands\NewCommand;
+use App\Concerns\Debug;
 use App\ConsoleWriter;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputInterface;

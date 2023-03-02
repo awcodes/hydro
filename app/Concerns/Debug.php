@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Commands;
+namespace App\Concerns;
 
 use App\ConsoleWriter;
 use Carbon\Carbon;

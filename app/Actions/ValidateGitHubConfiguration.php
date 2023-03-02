@@ -14,7 +14,7 @@ class ValidateGitHubConfiguration
     public const WARNING_UNABLE_TO_CREATE_REPOSITORY = 'Unable to create a new GitHub repository';
 
     public const INSTRUCTIONS_GITHUB_TOOLING_MISSING = [
-        'For Lambo to initialize a new repository on GitHub it requires either the',
+        'For Hydro to initialize a new repository on GitHub it requires either the',
         'official GitHub command line tool or the unofficial hub tool, but neither',
         'are installed. You can find more information about each tool by visiting:',
         '    - <fg=blue;options=underscore>https://github.com/cli/cli#installation</>',
@@ -26,7 +26,7 @@ class ValidateGitHubConfiguration
         'For more information, please visit, <fg=blue;options=underscore>https://cli.github.com/manual/gh_auth_login</>',
     ];
 
-    public const QUESTION_SHOULD_CONTINUE = 'Would you like Lambo to continue without GitHub repository creation?';
+    public const QUESTION_SHOULD_CONTINUE = 'Would you like Hydro to continue without GitHub repository creation?';
 
     public const SELECTED_GITHUB_TOOL_MESSAGE_PATTERN = "Using the '%s' command for GitHub configuration.";
 

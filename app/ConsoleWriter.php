@@ -8,8 +8,6 @@ use function Termwind\{render};
 
 class ConsoleWriter extends OutputStyle
 {
-    public const BLUE = 'fg=blue';
-
     public const GREEN = 'fg=green';
 
     public const RED = 'fg=red';

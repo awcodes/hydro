@@ -2,7 +2,6 @@
 
 namespace App\Commands;
 
-use App\Actions\CopySkeletonToProject;
 use App\Actions\DisplayHelpScreen;
 use App\Actions\DisplayWelcome;
 use App\Actions\InitializeGitHubRepository;
@@ -16,6 +15,7 @@ use App\Actions\ValidateGitHubConfiguration;
 use App\Actions\VerifyDependencies;
 use App\Actions\VerifyPathAvailable;
 use App\Actions\VerifyPluginDetails;
+use App\Concerns\Debug;
 use App\Config\CommandLineConfiguration;
 use App\Config\HydroConfiguration;
 use App\Config\SavedConfiguration;

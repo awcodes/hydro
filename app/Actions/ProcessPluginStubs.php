@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Actions\Concerns\AbortsCommands;
 use App\ConsoleWriter;
 use App\Environment;
 use App\Shell;
@@ -91,7 +92,7 @@ class ProcessPluginStubs
 
             match (true) {
                 str_contains($file, $this->determineSeparator('src/Skeleton.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)),
-                str_contains($file, $this->determineSeparator('src/SkeletonTheme.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)),
+                str_contains($file, $this->determineSeparator('src/SkeletonTheme.php')) => File::move($file, Str::of($file)->replace('SkeletonTheme', $this->packageClassName)),
                 str_contains($file, $this->determineSeparator('src/SkeletonServiceProvider.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)),
                 str_contains($file, $this->determineSeparator('src/Facades/Skeleton.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)),
                 str_contains($file, $this->determineSeparator('src/Testing/TestsSkeleton.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)),
@@ -164,6 +165,7 @@ class ProcessPluginStubs
             File::copy(__DIR__.'/../../stubs/configure/theme/plugin.css', $this->projectPath.'/resources/css/plugin.css');
             File::copy(__DIR__.'/../../stubs/configure/theme/tailwind.config.js', $this->projectPath.'/tailwind.config.js');
             File::delete($this->projectPath.'/src/Skeleton.php');
+            File::delete($this->projectPath.'/src/SkeletonServiceProvider.php');
             File::deleteDirectory($this->projectPath.'/config');
             File::deleteDirectory($this->projectPath.'/database');
             File::deleteDirectory($this->projectPath.'/stubs');
@@ -193,6 +195,14 @@ class ProcessPluginStubs
             $this->removeComposerDeps([
                 'filament/forms',
                 'filament/tables',
+            ]);
+        }
+
+        if (config('hydro.store.theme')) {
+            $this->cleanComposerForTheme();
+            $this->removeComposerDeps([
+                'illuminate/contracts',
+                'spatie/laravel-package-tools',
             ]);
         }
     }
@@ -264,6 +274,17 @@ class ProcessPluginStubs
                 break;
             }
         }
+
+        file_put_contents($this->projectPath.'/composer.json', json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+    }
+
+    public function cleanComposerForTheme(): void
+    {
+        $data = json_decode(file_get_contents($this->projectPath.'/composer.json'), true);
+
+        unset($data['extra']);
+        unset($data['autoload-dev']);
+        unset($data['autoload']['psr-4']['VendorName\\Skeleton\\Database\\Factories\\']);
 
         file_put_contents($this->projectPath.'/composer.json', json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
     }

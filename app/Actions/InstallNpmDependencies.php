@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Actions\Concerns\AbortsCommands;
 use App\ConsoleWriter;
 use App\Shell;
 use Exception;
