@@ -19,7 +19,7 @@ trait InteractsWithGitHub
 
     protected static function getDescription(): string
     {
-        $description = config('hydro.store.'.HydroConfiguration::PACKAGE_DESCRIPTION);
+        $description = config('hydro.store.'.HydroConfiguration::DESCRIPTION);
 
         if (is_null($description)) {
             return '';

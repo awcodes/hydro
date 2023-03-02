@@ -8,7 +8,7 @@ class Options
         [
             'long' => 'author',
             'param_description' => 'AUTHOR',
-            'cli_description' => 'Author name',
+            'cli_description' => 'Author name <fg=yellow>(wrap with quotes)</>',
         ],
         [
             'long' => 'email',
@@ -61,6 +61,12 @@ class Options
             'cli_description' => 'Disable automatic changelog updater workflow',
         ],
         [
+            'short' => 't',
+            'long' => 'target',
+            'param_description' => 'TARGET',
+            'cli_description' => 'Which version of Filament to target',
+        ],
+        [
             'long' => 'theme',
             'cli_description' => 'Is plugin a custom theme <fg=yellow>(3.x only)</>',
         ],
@@ -71,12 +77,6 @@ class Options
         [
             'long' => 'for-tables',
             'cli_description' => 'Is plugin only for the Tables package <fg=yellow>(3.x only)</>',
-        ],
-        [
-            'short' => 't',
-            'long' => 'target',
-            'param_description' => 'TARGET',
-            'cli_description' => 'Which version of Filament to target',
         ],
         [
             'short' => 'e',

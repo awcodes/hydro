@@ -2,14 +2,19 @@
 
 namespace App\Actions;
 
+use App\ConsoleWriter;
 use App\Options;
 
 class DisplayHelpScreen
 {
+    public function __construct(
+        protected ConsoleWriter $consoleWriter
+    ){}
+
     public function __invoke(): void
     {
-        app('console-writer')->text("\n <comment>Usage:</comment>{$this->createCliStringForCommandUsage()}");
-        app('console-writer')->text("\n <comment>Options (hydro new myPlugin):</comment>{$this->createCliStringForOptionDescriptions()}");
+        $this->consoleWriter->text("\n <comment>Usage:</comment>{$this->createCliStringForCommandUsage()}");
+        $this->consoleWriter->text("\n <comment>Options (hydro new myPlugin):</comment>{$this->createCliStringForOptionDescriptions()}");
     }
 
     public function createCliStringForOptionDescriptions(): string
