@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Actions\Concerns\AbortsCommands;
+use App\ConsoleWriter;
 use App\Shell;
 use Exception;
 use Illuminate\Support\Facades\File;
@@ -12,7 +13,8 @@ class EditConfigFile
     use AbortsCommands;
 
     public function __construct(
-        protected Shell $shell
+        protected Shell $shell,
+        protected ConsoleWriter $consoleWriter
     ) {
     }
 
@@ -25,12 +27,12 @@ class EditConfigFile
         $configFilePath = $configDir.'/'.$fileName;
 
         if (! File::isDirectory($configDir)) {
-            app('console-writer')->note("Configuration directory '{$configDir}' does not exist, creating it now...");
+            $this->consoleWriter->note("Configuration directory '{$configDir}' does not exist, creating it now...");
             $this->abortIf(! File::makeDirectory($configDir), "I could not create the directory: {$configDir}.");
         }
 
         if (! File::isFile($configFilePath)) {
-            app('console-writer')->note("File '{$configFilePath}' does not exist, creating it now...");
+            $this->consoleWriter->note("File '{$configFilePath}' does not exist, creating it now...");
             $this->abortIf(! File::put($configFilePath, File::get(base_path("stubs/{$fileName}"))), "I could not create the configuration file: {$configFilePath}.");
         }
 

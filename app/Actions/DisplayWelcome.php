@@ -2,6 +2,8 @@
 
 namespace App\Actions;
 
+use App\ConsoleWriter;
+
 class DisplayWelcome
 {
     protected string $logo = '
@@ -14,8 +16,9 @@ class DisplayWelcome
     protected string $welcomeText = '
 🦒 <fg=#eab308;bg=default> Hydro (:version:):</> A Filament Plugin CLI.';
 
-    public function __construct()
-    {
+    public function __construct(
+        protected ConsoleWriter $consoleWriter
+    ) {
         $this->welcomeText = str_replace(':version:', config('app.version'), $this->welcomeText);
     }
 
@@ -23,12 +26,12 @@ class DisplayWelcome
     {
         foreach (explode("\n", $this->logo) as $line) {
             // Extra space on the end fixes an issue with console when it ends with backslash
-            app('console-writer')->text("<fg=#eab308;bg=default>{$line} </>");
+            $this->consoleWriter->text("<fg=#eab308;bg=default>{$line} </>");
         }
 
         foreach (explode("\n", $this->welcomeText) as $line) {
             // Extra space on the end fixes an issue with console when it ends with backslash
-            app('console-writer')->text("{$line} ");
+            $this->consoleWriter->text("{$line} ");
         }
     }
 }
