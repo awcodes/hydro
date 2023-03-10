@@ -163,7 +163,7 @@ class NewCommand extends BaseCommand
             'AUTHOR' => HydroConfiguration::AUTHOR,
             'EMAIL' => HydroConfiguration::EMAIL,
             'USERNAME' => HydroConfiguration::USERNAME,
-            'FILAMENTTARGET' => HydroConfiguration::TARGET,
+            'FILAMENTVERSION' => HydroConfiguration::TARGET,
             'VENDOR' => HydroConfiguration::VENDOR,
             'VENDORSLUG' => HydroConfiguration::VENDOR_SLUG,
             'VENDORNAMESPACE' => HydroConfiguration::VENDOR_NAMESPACE,

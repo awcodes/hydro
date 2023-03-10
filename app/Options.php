@@ -27,12 +27,12 @@ class Options
         ],
         [
             'long' => 'vendor-slug',
-            'param_description' => 'V_SLUG',
+            'param_description' => 'VENDOR_SLUG',
             'cli_description' => 'Vendor slug',
         ],
         [
             'long' => 'vendor-namespace',
-            'param_description' => 'NAMESPACE',
+            'param_description' => 'VENDOR_NAMESPACE',
             'cli_description' => 'Vendor namespace',
         ],
         [
