@@ -89,7 +89,7 @@ class VerifyPluginDetails
 
         if (! $this->vendorNamespace) {
             $this->vendorNamespace = $this->consoleWriter->ask('Vendor namespace', ucwords($this->vendorSlug));
-            config()->set('hydro.store.namespace', $this->vendorNamespace);
+            config()->set('hydro.store.vendor_namespace', $this->vendorNamespace);
         }
 
         $this->packageName = $this->consoleWriter->ask('Package name', config('hydro.store.plugin_name'));
