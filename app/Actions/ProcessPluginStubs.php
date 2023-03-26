@@ -99,6 +99,7 @@ class ProcessPluginStubs
                 str_contains($file, $this->determineSeparator('src/Commands/SkeletonCommand.php')) => File::move($file, Str::of($file)->replace('Skeleton', $this->packageClassName)),
                 str_contains($file, $this->determineSeparator('database/migrations/create_skeleton_table.php.stub')) => File::move($file, Str::of($file)->replace('skeleton', $this->packageSlug)),
                 str_contains($file, $this->determineSeparator('config/skeleton.php')) => File::move($file, Str::of($file)->replace('skeleton', $this->packageSlug)),
+                str_contains($file, 'README.md') => $this->removeTag($file, 'delete'),
                 default => [],
             };
         }
@@ -293,5 +294,14 @@ class ProcessPluginStubs
         unset($data['autoload']['psr-4']['VendorName\\Skeleton\\Database\\Factories\\']);
 
         file_put_contents($this->projectPath.'/composer.json', json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+    }
+
+    private function removeTag(string $file, string $tag): void
+    {
+        $contents = file_get_contents($file);
+        file_put_contents(
+            $file,
+            preg_replace('/<!--'.$tag.'-->.*<!--\/'.$tag.'-->/s', '', $contents) ?: $contents
+        );
     }
 }
