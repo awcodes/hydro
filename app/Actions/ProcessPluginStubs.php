@@ -164,25 +164,25 @@ class ProcessPluginStubs
 
         if ($this->target === '3.x') {
             if (config('hydro.store.theme')) {
-                File::copy($this->projectPath . '/configure-stubs/theme/package.json', $this->projectPath . '/package.json');
-                File::copy($this->projectPath . '/configure-stubs/theme/plugin.css', $this->projectPath . '/resources/css/plugin.css');
-                File::copy($this->projectPath . '/configure-stubs/theme/tailwind.config.js', $this->projectPath . '/tailwind.config.js');
-                File::delete($this->projectPath . '/src/Skeleton.php');
-                File::delete($this->projectPath . '/src/SkeletonServiceProvider.php');
-                File::deleteDirectory($this->projectPath . '/config');
-                File::deleteDirectory($this->projectPath . '/database');
-                File::deleteDirectory($this->projectPath . '/stubs');
-                File::deleteDirectory($this->projectPath . '/resources/js');
-                File::deleteDirectory($this->projectPath . '/resources/lang');
-                File::deleteDirectory($this->projectPath . '/resources/views');
-                File::deleteDirectory($this->projectPath . '/src/Commands');
-                File::deleteDirectory($this->projectPath . '/src/Facades');
-                File::deleteDirectory($this->projectPath . '/src/Testing');
+                File::copy($this->projectPath.'/configure-stubs/theme/package.json', $this->projectPath.'/package.json');
+                File::copy($this->projectPath.'/configure-stubs/theme/plugin.css', $this->projectPath.'/resources/css/plugin.css');
+                File::copy($this->projectPath.'/configure-stubs/theme/tailwind.config.js', $this->projectPath.'/tailwind.config.js');
+                File::delete($this->projectPath.'/src/Skeleton.php');
+                File::delete($this->projectPath.'/src/SkeletonServiceProvider.php');
+                File::deleteDirectory($this->projectPath.'/config');
+                File::deleteDirectory($this->projectPath.'/database');
+                File::deleteDirectory($this->projectPath.'/stubs');
+                File::deleteDirectory($this->projectPath.'/resources/js');
+                File::deleteDirectory($this->projectPath.'/resources/lang');
+                File::deleteDirectory($this->projectPath.'/resources/views');
+                File::deleteDirectory($this->projectPath.'/src/Commands');
+                File::deleteDirectory($this->projectPath.'/src/Facades');
+                File::deleteDirectory($this->projectPath.'/src/Testing');
             } else {
-                File::delete($this->projectPath . '/src/SkeletonTheme.php');
-                File::copy($this->projectPath . '/configure-stubs/package/package.json', $this->projectPath . '/package.json');
-                File::copy($this->projectPath . '/configure-stubs/package/plugin.css', $this->projectPath . '/resources/css/plugin.css');
-                File::copy($this->projectPath . '/configure-stubs/package/tailwind.config.js', $this->projectPath . '/tailwind.config.js');
+                File::delete($this->projectPath.'/src/SkeletonTheme.php');
+                File::copy($this->projectPath.'/configure-stubs/package/package.json', $this->projectPath.'/package.json');
+                File::copy($this->projectPath.'/configure-stubs/package/plugin.css', $this->projectPath.'/resources/css/plugin.css');
+                File::copy($this->projectPath.'/configure-stubs/package/tailwind.config.js', $this->projectPath.'/tailwind.config.js');
             }
 
             if (config('hydro.store.for_forms')) {
@@ -210,7 +210,7 @@ class ProcessPluginStubs
                 ]);
             }
 
-            File::deleteDirectory($this->projectPath . '/configure-stubs');
+            File::deleteDirectory($this->projectPath.'/configure-stubs');
         }
     }
 
