@@ -155,55 +155,61 @@ class ProcessPluginStubs
 
     private function copyStubs(): void
     {
+        $branch = $this->target === '3.x' ? '3.x' : 'main';
         File::makeDirectory($this->projectPath);
-        File::copyDirectory(__DIR__.'/../../stubs/common', $this->projectPath);
-        File::copyDirectory(__DIR__.'/../../stubs/'.$this->target, $this->projectPath.'/src');
+        $this->shell->execQuietlyInProject('git clone --single-branch --branch "'.$branch.'" https://github.com/filamentphp/plugin-skeleton.git .');
+        File::deleteDirectory($this->projectPath.'/.git');
+        File::delete($this->projectPath.'/configure.php');
 
-        if (config('hydro.store.theme')) {
-            File::copy(__DIR__.'/../../stubs/'.$this->target.'/SkeletonTheme.php', $this->projectPath.'/src/SkeletonTheme.php');
-            File::copy(__DIR__.'/../../stubs/configure/theme/package.json', $this->projectPath.'/package.json');
-            File::copy(__DIR__.'/../../stubs/configure/theme/plugin.css', $this->projectPath.'/resources/css/plugin.css');
-            File::copy(__DIR__.'/../../stubs/configure/theme/tailwind.config.js', $this->projectPath.'/tailwind.config.js');
-            File::delete($this->projectPath.'/src/Skeleton.php');
-            File::delete($this->projectPath.'/src/SkeletonServiceProvider.php');
-            File::deleteDirectory($this->projectPath.'/config');
-            File::deleteDirectory($this->projectPath.'/database');
-            File::deleteDirectory($this->projectPath.'/stubs');
-            File::deleteDirectory($this->projectPath.'/resources/js');
-            File::deleteDirectory($this->projectPath.'/resources/lang');
-            File::deleteDirectory($this->projectPath.'/resources/views');
-            File::deleteDirectory($this->projectPath.'/src/Commands');
-            File::deleteDirectory($this->projectPath.'/src/Facades');
-        } else {
-            File::copy(__DIR__.'/../../stubs/'.$this->target.'/SkeletonServiceProvider.php', $this->projectPath.'/src/SkeletonServiceProvider.php');
-            File::copy(__DIR__.'/../../stubs/configure/package/package.json', $this->projectPath.'/package.json');
-            File::copy(__DIR__.'/../../stubs/configure/package/plugin.css', $this->projectPath.'/resources/css/plugin.css');
-            File::copy(__DIR__.'/../../stubs/configure/package/tailwind.config.js', $this->projectPath.'/tailwind.config.js');
-        }
+        if ($this->target === '3.x') {
+            if (config('hydro.store.theme')) {
+                File::copy($this->projectPath . '/configure-stubs/theme/package.json', $this->projectPath . '/package.json');
+                File::copy($this->projectPath . '/configure-stubs/theme/plugin.css', $this->projectPath . '/resources/css/plugin.css');
+                File::copy($this->projectPath . '/configure-stubs/theme/tailwind.config.js', $this->projectPath . '/tailwind.config.js');
+                File::delete($this->projectPath . '/src/Skeleton.php');
+                File::delete($this->projectPath . '/src/SkeletonServiceProvider.php');
+                File::deleteDirectory($this->projectPath . '/config');
+                File::deleteDirectory($this->projectPath . '/database');
+                File::deleteDirectory($this->projectPath . '/stubs');
+                File::deleteDirectory($this->projectPath . '/resources/js');
+                File::deleteDirectory($this->projectPath . '/resources/lang');
+                File::deleteDirectory($this->projectPath . '/resources/views');
+                File::deleteDirectory($this->projectPath . '/src/Commands');
+                File::deleteDirectory($this->projectPath . '/src/Facades');
+                File::deleteDirectory($this->projectPath . '/src/Testing');
+            } else {
+                File::delete($this->projectPath . '/src/SkeletonTheme.php');
+                File::copy($this->projectPath . '/configure-stubs/package/package.json', $this->projectPath . '/package.json');
+                File::copy($this->projectPath . '/configure-stubs/package/plugin.css', $this->projectPath . '/resources/css/plugin.css');
+                File::copy($this->projectPath . '/configure-stubs/package/tailwind.config.js', $this->projectPath . '/tailwind.config.js');
+            }
 
-        if (config('hydro.store.for_forms')) {
-            $this->removeComposerDeps([
-                'filament/filament',
-                'filament/tables',
-            ]);
-        } elseif (config('hydro.store.for_tables')) {
-            $this->removeComposerDeps([
-                'filament/filament',
-                'filament/forms',
-            ]);
-        } else {
-            $this->removeComposerDeps([
-                'filament/forms',
-                'filament/tables',
-            ]);
-        }
+            if (config('hydro.store.for_forms')) {
+                $this->removeComposerDeps([
+                    'filament/filament',
+                    'filament/tables',
+                ]);
+            } elseif (config('hydro.store.for_tables')) {
+                $this->removeComposerDeps([
+                    'filament/filament',
+                    'filament/forms',
+                ]);
+            } else {
+                $this->removeComposerDeps([
+                    'filament/forms',
+                    'filament/tables',
+                ]);
+            }
 
-        if (config('hydro.store.theme')) {
-            $this->cleanComposerForTheme();
-            $this->removeComposerDeps([
-                'illuminate/contracts',
-                'spatie/laravel-package-tools',
-            ]);
+            if (config('hydro.store.theme')) {
+                $this->cleanComposerForTheme();
+                $this->removeComposerDeps([
+                    'illuminate/contracts',
+                    'spatie/laravel-package-tools',
+                ]);
+            }
+
+            File::deleteDirectory($this->projectPath . '/configure-stubs');
         }
     }
 
@@ -255,7 +261,7 @@ class ProcessPluginStubs
         file_put_contents($this->projectPath.'/composer.json', json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
     }
 
-    public function removeComposerScripts(array $scriptNames): void
+    private function removeComposerScripts(array $scriptNames): void
     {
         $data = json_decode(file_get_contents($this->projectPath.'/composer.json'), true);
 
@@ -278,7 +284,7 @@ class ProcessPluginStubs
         file_put_contents($this->projectPath.'/composer.json', json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
     }
 
-    public function cleanComposerForTheme(): void
+    private function cleanComposerForTheme(): void
     {
         $data = json_decode(file_get_contents($this->projectPath.'/composer.json'), true);
 
