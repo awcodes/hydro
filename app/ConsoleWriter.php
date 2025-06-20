@@ -4,7 +4,8 @@ namespace App;
 
 use Illuminate\Console\OutputStyle;
 use Symfony\Component\Process\Process;
-use function Termwind\{render};
+
+use function Termwind\render;
 
 class ConsoleWriter extends OutputStyle
 {

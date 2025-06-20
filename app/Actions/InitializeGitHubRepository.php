@@ -18,8 +18,7 @@ class InitializeGitHubRepository
     public function __construct(
         protected Shell $shell,
         protected ConsoleWriter $consoleWriter
-    ) {
-    }
+    ) {}
 
     /**
      * @throws Exception

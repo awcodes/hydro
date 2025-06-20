@@ -14,8 +14,7 @@ class PushToGitHub
     public function __construct(
         protected Shell $shell,
         protected ConsoleWriter $consoleWriter
-    ) {
-    }
+    ) {}
 
     public function __invoke(): void
     {

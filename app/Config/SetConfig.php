@@ -26,11 +26,11 @@ class SetConfig
     private array $commandLineInput;
 
     public function __construct(
-       CommandLineConfiguration $commandLineConfiguration,
-       SavedConfiguration $savedConfiguration,
-       ShellConfiguration $shellConfiguration,
-       ConsoleWriter $consoleWriter,
-       InputInterface $commandLineOptions
+        CommandLineConfiguration $commandLineConfiguration,
+        SavedConfiguration $savedConfiguration,
+        ShellConfiguration $shellConfiguration,
+        ConsoleWriter $consoleWriter,
+        InputInterface $commandLineOptions
     ) {
         $this->commandLineConfiguration = $commandLineConfiguration;
         $this->savedConfiguration = $savedConfiguration;

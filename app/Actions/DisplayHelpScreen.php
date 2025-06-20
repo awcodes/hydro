@@ -9,8 +9,7 @@ class DisplayHelpScreen
 {
     public function __construct(
         protected ConsoleWriter $consoleWriter
-    ) {
-    }
+    ) {}
 
     public function __invoke(): void
     {
@@ -20,7 +19,7 @@ class DisplayHelpScreen
 
     public function createCliStringForOptionDescriptions(): string
     {
-        return collect((new Options())->all())->reduce(function ($carry, $option) {
+        return collect((new Options)->all())->reduce(function ($carry, $option) {
             $flag = isset($option['short'])
                 ? '-'.$option['short'].', --'.$option['long']
                 : '    --'.$option['long'];

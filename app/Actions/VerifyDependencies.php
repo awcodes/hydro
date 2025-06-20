@@ -40,8 +40,7 @@ class VerifyDependencies
     public function __construct(
         protected ExecutableFinder $finder,
         protected ConsoleWriter $consoleWriter,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws Exception

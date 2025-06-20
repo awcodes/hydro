@@ -15,9 +15,9 @@ trait Debug
 {
     protected function arrayToTable(
         array $data,
-        array $filter = null,
+        ?array $filter = null,
         string $keyPrefix = '',
-        array $headers = null
+        ?array $headers = null
     ): void {
         if (empty($data)) {
             return;

@@ -26,7 +26,8 @@ use App\Options;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use function Termwind\{terminal};
+
+use function Termwind\terminal;
 
 class NewCommand extends BaseCommand
 {
@@ -51,7 +52,7 @@ class NewCommand extends BaseCommand
 
     public function buildSignature()
     {
-        return collect((new Options())->all())->reduce(
+        return collect((new Options)->all())->reduce(
             function ($carry, $option) {
                 return $carry.$this->buildSignatureOption($option);
             },

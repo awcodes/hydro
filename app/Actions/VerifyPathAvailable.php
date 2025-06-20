@@ -12,9 +12,8 @@ class VerifyPathAvailable
     use AbortsCommands;
 
     public function __construct(
-         protected ConsoleWriter $consoleWriter
-     ) {
-    }
+        protected ConsoleWriter $consoleWriter
+    ) {}
 
     /**
      * @throws Exception
