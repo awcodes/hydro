@@ -4,23 +4,25 @@ A Hydro CLI Tool.
 
 This is a command-line tool that replaces the need to use Filament's Plugin Skeleton through GitHub by allowing local setup of your plugin from the start.
 
-# Requirements
+## Requirements
 
 - PHP 8.0+
 
-# Installation
+<!-- [docs_start] -->
+
+## Installation
 
 ```bash
 composer global require awcodes/hydro
 ```
 
-# Upgrading
+## Upgrading
 
 ```bash
 composer global update awcodes/hydro
 ```
 
-# Usage
+## Usage
 
 Make sure `~/.composer/vendor/bin` is in your terminal's path.
 
@@ -29,7 +31,7 @@ cd ~/<working-directory>
 hydro new AwesomePlugin
 ```
 
-# Customizing Hydro
+## Customizing Hydro
 
 While the default actions Hydro provides are great, most users will want to 
 customize at least a few of the steps. Thankfully, Hydro is built to be 
@@ -62,7 +64,7 @@ will be read on every usage of Hydro.
 Any command-line parameters passed in will override Hydro's defaults and your 
 config settings. See a [full list of the parameters you can pass in](#parameters).
 
-# Hydro Commands
+## Hydro Commands
 
 - `help` or `help-screen` show the help screen
 
@@ -74,7 +76,7 @@ config settings. See a [full list of the parameters you can pass in](#parameters
   ```
 
 <a id="parameters"></a>
-# Configurable parameters
+## Configurable parameters
 
 You can optionally pass one or more of these parameters every time you use 
 Hydro.
@@ -147,3 +149,5 @@ hydro new AwesomePlugin --github --gh-homepage=https://example.com
 # Repository created at https://github.com/acme/awesome-plugin
 hydro new AwesomePlugin --github --gh-org=acme
 ```
+
+<!-- [docs_end] -->
